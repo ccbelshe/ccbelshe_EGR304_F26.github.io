@@ -7,7 +7,7 @@ tags:
 <center>
 <font size= "6">Clay Belsher Datasheet</font><br>
 as part of<br>
-<font size= "8"> Project Name</font><br>
+<font size= "8"> Git Project</font><br>
 for<br>
 <font size= "5"> Team 201 </font><br>
 
