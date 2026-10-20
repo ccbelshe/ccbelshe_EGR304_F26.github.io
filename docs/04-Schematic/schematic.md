@@ -8,7 +8,7 @@ My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control a 12 V
 
 ## Schematic
 
-![Pump control schematic](https://raw.githubusercontent.com/ccbelshe/ccbelshe_EGR304_F26.github.io/main/docs/04-Schematic/CB_Pump_Control.png)
+<img src="https://raw.githubusercontent.com/ccbelshe/ccbelshe_EGR304_F26.github.io/main/docs/04-Schematic/CB_Pump_Control.png" alt="Pump schematic" class="skip-glightbox" style="width:100%;">
 
 ## Downloads
 
