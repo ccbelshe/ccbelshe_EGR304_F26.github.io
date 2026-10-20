@@ -1,16 +1,20 @@
 ---
-title: Schematic
+title: Schematics
 ---
 
 ## Overview
 
-This schematic is design to support .... (highlight functionally, power, and controller).
+My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control a 12 V R385 pump through a MOSFET driver. It includes a 5 V regulator, fuse, flyback diode, UART interface, and debugging components.
 
+## Schematic
 
-![schematic](Screenshot.png){style width:"350" height:"300;"}
-**Figure ##:** Showing a example schematic.
+![Pump control schematic](CB_Pump_Control.png)
 
+## Downloads
 
-## Resouces
+- [Schematic PDF](CB_Pump_Control.pdf)
+- [Complete KiCad project ZIP](CB_Pump_Control.zip)
 
-The schematic as a PDF download is available [*here*](ExampleSchematic.pdf), and the Zip folder of the project [*here*](dummyZip.zip).
+## Pending Verification
+
+The fuse rating, PWM/gate-drive performance, footprint assignments, and team UART pinout require verification before fabrication.
