@@ -1198,7 +1198,7 @@
 <p><strong>Custom option considered:</strong> A commercial enclosed adapter provides the low-voltage input. The local regulation and motor-control circuitry go on our board.</p>
 <h2 id="controller-and-communication">Controller and Communication</h2>
 <p>The current design uses the PIC18F57Q43 Curiosity Nano, which I already have from lab work. It provides the GPIO needed for the command inputs, motor output, and local debugging. The project allows the Curiosity Nano to be used as the controller.</p>
-<p>The main controller sends CMD0 and CMD1 as two digital signals. My board reads their combination and performs the assigned pump action. The team still needs to finalize the four command assignments.</p>
+<p>The main controller sends C1 and C0 as two digital signals. C1 connects from ribbon pin 1 to RC3, and C0 connects from ribbon pin 2 to RC2. Read as C1 C0, 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. UART and I²C are not used for inter-board commands.</p>
 <p>The main controller receives the system’s measurement information and decides when to stop dispensing. My board controls the motor in response to its commands.</p>
 <p>UART and I²C are not used for inter-board commands.</p>
 <h2 id="supporting-connections-and-debugging">Supporting Connections and Debugging</h2>
