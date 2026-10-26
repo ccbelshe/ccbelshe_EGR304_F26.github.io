@@ -25,7 +25,7 @@ My current schematic uses a 12 V input. I still need to resolve that choice with
 
 ### Command Inputs
 
-The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations.
+The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations. The finalized pump command is read as C1 C0: 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. C1 enters through J3 pin 1 at RC3, and C0 enters through J3 pin 2 at RC2. The pump runs only while the command is 01.
 
 | Signal | Connector | PIC port |
 |---|---|---|
@@ -33,7 +33,7 @@ The main board sends commands to my pump board using two digital signals. Each s
 | PUMP_CMD1 | J3 pin 2 | RC2 |
 | Shared ground | J3 pin 8 | GND |
 
-RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. Our team still needs to agree on what each command combination means.
+RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. 
 
 The ribbon uses pins 1–5 for digital I/O, pins 6–7 for analog, and pin 8 for ground. Each board has its own power connection.
 
