@@ -646,6 +646,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Power Budget
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -655,6 +666,61 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preliminary-design-estimate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preliminary Design Estimate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results-under-these-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Results Under These Assumptions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spreadsheet-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spreadsheet Results
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -744,6 +810,50 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preliminary-design-estimate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preliminary Design Estimate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results-under-these-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Results Under These Assumptions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spreadsheet-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spreadsheet Results
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -766,6 +876,100 @@
 
 
 <h1 id="power-budget">Power Budget</h1>
+<p><strong>Clay Belsher — Fill-A-Bot Pump Control</strong></p>
+<h2 id="preliminary-design-estimate">Preliminary Design Estimate</h2>
+<p>This budget uses the course spreadsheet template for my pump board. I have the Curiosity Nano and basic lab components, but I do not have the pump yet. The current values are planning assumptions, not measurements or verified maximum ratings.</p>
+<p>The calculation uses a 9V input to match the project requirement. My current schematic still shows 12V and needs to be updated after the supply and pump choices are resolved.</p>
+<table>
+<thead>
+<tr>
+<th>Load</th>
+<th style="text-align: right;">Assumed current</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposed R385 pump</td>
+<td style="text-align: right;">500mA</td>
+<td>Placeholder for operating-load planning; startup and stall current unknown.</td>
+</tr>
+<tr>
+<td>Complete Curiosity Nano</td>
+<td style="text-align: right;">100mA</td>
+<td>Whole-board planning allowance, not a datasheet maximum or measured value.</td>
+</tr>
+<tr>
+<td>External debug LED</td>
+<td style="text-align: right;">5mA</td>
+<td>Upper-bound allowance using the 5V rail and 1kΩ series resistor.</td>
+</tr>
+<tr>
+<td>Other control loads</td>
+<td style="text-align: right;">1mA</td>
+<td>Allowance for pull-ups and gate drive; switching configuration still needs verification.</td>
+</tr>
+<tr>
+<td>L7805 own operating current</td>
+<td style="text-align: right;">10mA</td>
+<td>Planning allowance, not a verified maximum.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="results-under-these-assumptions">Results Under These Assumptions</h2>
+<table>
+<thead>
+<tr>
+<th>Result</th>
+<th style="text-align: right;">Calculated value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5V control load</td>
+<td style="text-align: right;">106mA</td>
+</tr>
+<tr>
+<td>5V load with 25% margin</td>
+<td style="text-align: right;">132.5mA</td>
+</tr>
+<tr>
+<td>Regulator input current, including own operating current</td>
+<td style="text-align: right;">116mA</td>
+</tr>
+<tr>
+<td>Total adapter operating current</td>
+<td style="text-align: right;">616mA</td>
+</tr>
+<tr>
+<td>Adapter current with 25% margin</td>
+<td style="text-align: right;">770mA</td>
+</tr>
+<tr>
+<td>Adapter operating input power at 9V</td>
+<td style="text-align: right;">5.544W</td>
+</tr>
+<tr>
+<td>Regulator heat at 9V, including assumed own current</td>
+<td style="text-align: right;">0.514W</td>
+</tr>
+<tr>
+<td>Regulator heat at original 12V assumption</td>
+<td style="text-align: right;">0.862W</td>
+</tr>
+</tbody>
+</table>
+<p>The pump receives motor-supply power directly. Its current does not pass through the 5V regulator. The source total includes the regulator input current once; it does not add the 5V load again.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>These assumptions give a preliminary source requirement of 770mA after a 25% margin. That number does not establish that an adapter will start the motor or handle a stall. The adapter model and current rating remain unselected.</p>
+<p>The budget must be revised using the actual pump current and the final H-bridge design. H-bridge losses and control demand are not included yet. Regulator temperature and the Nano external-power configuration also need verification. The regulator heat estimates do not establish that a heat sink is unnecessary.</p>
+<p>No battery or separate 3.3V rail is used. Other team boards are outside this individual budget, and the ribbon connector does not supply their power.</p>
+<h2 id="spreadsheet-results">Spreadsheet Results</h2>
+<p><img alt="Power budget — loads and motor rail" src="../CB_Power_Budget_1.png" /></p>
+<p><img alt="Power budget — control rail and regulator input" src="../CB_Power_Budget_2.png" /></p>
+<p><img alt="Power budget — source total and heat" src="../CB_Power_Budget_3.png" /></p>
+<p><a href="../CB_Pump_Power_Budget.xlsx">Download the editable Excel power budget</a></p>
+<p><a href="../CB_Pump_Power_Budget.zip">Download the Excel power budget ZIP</a></p>
 
 
 
