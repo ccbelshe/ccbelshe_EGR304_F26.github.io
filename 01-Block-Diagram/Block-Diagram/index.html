@@ -928,7 +928,7 @@
 </tbody>
 </table>
 <h2 id="design-decisions">Design Decisions</h2>
-<p>Two digital inputs provide four possible command combinations with simple pin-to-pin communication. The main controller will determine when the pump runs and stops. The team still needs to finalize the command assignments.</p>
+<p>The main controller sends a two-bit pump command, written as C1 C0. Ribbon pin 1 carries C1 to RC3, and ribbon pin 2 carries C0 to RC2. The commands are 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. The pump runs only while the command is 01. Ribbon pin 8 provides common ground.</p>
 <p>The motor uses a separate power path because it requires more current than a microcontroller pin can supply. All control and motor grounds share a common reference.</p>
 <h2 id="remaining-design-work">Remaining Design Work</h2>
 <p>The current single-MOSFET circuit supports one-direction operation. An H-bridge is still needed to meet the forward-and-reverse requirement.</p>
