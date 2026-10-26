@@ -4,7 +4,7 @@ title: Schematics
 
 ## Overview
 
-My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control a 12 V R385 pump through a MOSFET driver. It includes a 5 V regulator, fuse, flyback diode, UART interface, and debugging components.
+My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control an R385 pump through a MOSFET switching circuit. It receives a two-bit digital command from the main controller through PUMP_CMD0 on RC3 and PUMP_CMD1 on RC2. The board includes a local power input, 5 V regulator, fuse, flyback diode, and debugging components. The current motor circuit supports one-direction operation; forward/reverse control remains a planned revision.
 
 ## Schematic
 
@@ -17,4 +17,4 @@ My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control a 12 V
 
 ## Pending Verification
 
-The fuse rating, PWM/gate-drive performance, footprint assignments, and team UART pinout require verification before fabrication.
+
