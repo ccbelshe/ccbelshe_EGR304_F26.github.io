@@ -8,13 +8,13 @@ My subsystem controls the pump that moves water from the reservoir to the contai
 
 The main controller determines when the selected amount has been dispensed and sends the command to stop the pump. Filling accuracy depends on the complete system, including measurement, communication, pump response, and water remaining in the tubing.
 
-**Current design status:** The schematic and component comparisons were originally based on a 12V supply. The project specifies a 9V adapter, so the supply selection and pump performance at that voltage still need confirmation. The current single-MOSFET circuit supports one-direction operation. An H-bridge is needed to meet the forward-and-reverse requirement.
+**Current design status:** The schematic and original component comparisons use a 12V supply. The project specifies a 9V adapter, so the supply selection and pump performance at that voltage still need confirmation. The current single-MOSFET circuit supports one-direction operation. An H-bridge is needed to meet the forward-and-reverse requirement.
 
-The tables below document the original component comparisons. Prices are earlier comparison estimates in USD, excluding shipping and taxes. Prices, availability, and specifications must be checked before ordering.
+The tables below document the component comparisons and explain the current choices. Prices are earlier estimates in USD, excluding shipping and taxes. Prices, availability, and specifications need checking before ordering.
 
 ## Water Pump
 
-The pump needs to move water at a useful rate, fit the tubing arrangement, and work with the final supply. The required reverse operation also needs to be checked with the actual pump mechanism. Reversing motor rotation does not automatically mean the pump will reverse water flow.
+The pump needs to move water at a useful rate, fit the tubing arrangement, and work with the final supply. The required reverse operation also needs checking with the actual pump mechanism. Reversing motor rotation does not automatically mean the pump will reverse water flow.
 
 | Option | Estimated Unit Cost | Pros | Cons |
 |---|---|---|---|
@@ -26,7 +26,7 @@ The pump needs to move water at a useful rate, fit the tubing arrangement, and w
 
 **Why I chose it:** I originally chose the R385 because it fit the planned external tubing arrangement and offered a useful advertised flow rate at a lower cost than the peristaltic option. It also lets us mount the pump outside the reservoir.
 
-**What still needs checking:** I need to confirm performance at the required supply voltage, operating and startup current, and whether this pump can perform the reverse operation the system needs. If it cannot, the pump selection must change.
+**What still needs checking:** I do not have the pump yet. I need to confirm performance at the required supply voltage, operating and startup current, and whether this pump can perform the reverse operation the system needs. If it cannot, the pump selection must change.
 
 **Custom option considered:** Building the pump itself would add work on sealing, moving parts, and consistent flow. A purchased pump lets us focus on the control board and dispensing performance.
 
@@ -44,11 +44,13 @@ These comparisons apply to the current single-MOSFET circuit. They do not repres
 
 **Component in the current schematic: AOTF2618L.**
 
-**Why I chose it:** I originally chose the AOTF2618L for the planned 5V control signal and motor supply. Having its symbol and footprint in the project also made it convenient to include in the schematic. The final suitability depends on the actual gate voltage, motor current, and temperature.
+**Why I chose it:** I originally chose the AOTF2618L for the planned 5V control signal and motor supply. Having its symbol and footprint in the project also made it convenient to include in the schematic. Its final suitability depends on the actual gate voltage, motor current, and temperature.
 
-**Required revision:** One low-side MOSFET cannot reverse the motor. I need to replace this switching arrangement with an H-bridge that supports the final supply voltage, startup and stall current, and controller logic levels. The motor-current recirculation protection must match that design.
+**Supporting components:** R1 is the 1kΩ series gate resistor. R2 is the 10kΩ gate pull-down resistor. JP1 provides an enable jumper in the control path. These components support the current switching circuit; they do not provide direction control.
 
-**Custom option considered:** A discrete H-bridge or an integrated H-bridge IC could provide direction control. The final choice has not been made. It must meet the requirement to build the motor-control circuitry on our board rather than use a peripheral daughterboard.
+**Required revision:** One low-side MOSFET cannot reverse the motor. I need to replace this switching arrangement with an H-bridge that supports the final supply voltage, startup and stall current, and controller logic levels. Motor-current recirculation protection must match that design.
+
+**Custom option considered:** A discrete H-bridge or an integrated H-bridge IC could provide direction control. The final choice has not been made. The motor-control circuitry must be built on our board rather than supplied by a peripheral daughterboard.
 
 ## 5V Voltage Regulator
 
@@ -64,7 +66,9 @@ The control electronics use a planned 5V rail. The assignment requires a linear 
 
 **Why I chose it:** The L7805 provides the fixed 5V output the control circuit needs without an adjustable resistor network. It also meets the assignment’s linear-regulator requirement.
 
-**Power and heat:** Regulator dissipation is approximately `(input voltage − 5V) × output current`, plus its own operating losses. At an example load of 100mA, this is about 0.4W with a 9V input or 0.7W with a 12V input. These are examples, not measured board loads. The completed power budget and thermal check will determine whether a heat sink is needed.
+**Supporting components:** The input and output capacitors support regulator operation and reduce supply disturbances. Local decoupling near the controller helps supply brief changes in current demand. Capacitor values, voltage ratings, and placement need to follow the final regulator and board requirements.
+
+**Power and heat:** The preliminary budget assumes a 106mA control load and a 10mA allowance for the regulator’s own operating current. Under those assumptions, estimated regulator heat is 0.514W at a 9V input or 0.862W at a 12V input. These are calculated estimates, not measurements or verified maximum values. Actual load, mounting, and temperature will determine whether a heat sink is needed.
 
 The Curiosity Nano external-power configuration must also be verified before connecting the regulator to VTG.
 
@@ -78,7 +82,7 @@ The motor is an inductive load. When the MOSFET turns off, motor current needs a
 |---|---|---|---|
 | **Diotec 1N5822**<br>[Datasheet](https://diotec.com/request/datasheet/1n5820.pdf) | $0.71 | Schottky diode option for motor switching.<br>Listed 3A average-current rating.<br>Listed 40V reverse-voltage rating. | Current capability depends on mounting and temperature.<br>Actual motor current must be checked.<br>Protection arrangement must be reconsidered for the H-bridge. |
 | **Diotec 1N5819**<br>[Datasheet](https://diotec.com/request/datasheet/1n5817.pdf) | $0.29 | Lowest estimated price.<br>Schottky diode option.<br>Smaller package. | Listed 1A average-current rating leaves less current margin.<br>Motor-current pulses may exceed its suitability.<br>Thermal performance still needs checking. |
-| **Vishay SB560-E3/54**<br>[Datasheet](https://www.vishay.com/docs/88721/sb520.pdf) | $1.26 | Listed 5A average-current rating.<br>Listed 60V reverse-voltage rating.<br>Through-hole package is convenient for assembly. | Highest estimated price.<br>Larger package uses more board space.<br>Additional capacity may be unnecessary after the motor current is established. |
+| **Vishay SB560-E3/54**<br>[Datasheet](https://www.vishay.com/docs/88721/sb520.pdf) | $1.26 | Listed 5A average-current rating.<br>Listed 60V reverse-voltage rating.<br>Through-hole package is convenient for assembly. | Highest estimated price.<br>Larger package uses more board space.<br>Additional capacity may be unnecessary after motor current is established. |
 
 **Component in the current schematic: 1N5822.**
 
@@ -86,13 +90,13 @@ The motor is an inductive load. When the MOSFET turns off, motor current needs a
 
 In the current single-direction circuit, the cathode connects to motor-supply positive. The anode connects to pump negative and the MOSFET drain.
 
-**Required revision:** This single diode across the motor must not be carried unchanged into a bidirectional H-bridge circuit. It would conduct when the motor polarity is reversed. The final H-bridge needs the recirculation paths specified for that driver arrangement.
+**Required revision:** This single diode across the motor must not be carried unchanged into a bidirectional H-bridge circuit. It would conduct when motor polarity is reversed. The final H-bridge needs the recirculation paths specified for that driver arrangement.
 
 **Custom option considered:** Other clamping arrangements could affect how quickly motor current decays. The protection choice must be made with the final motor driver and tested for stopping behavior.
 
 ## Power Supply — Original 12V Comparison
 
-The original design used a 12V adapter to supply the motor and the input of the 5V regulator. These comparisons are retained to document that design decision.
+The original design used a 12V adapter to supply the motor and the input of the 5V regulator. These comparisons document that original decision.
 
 **The project specifies a 9V adapter. None of the 12V models below is a finalized supply selection for that requirement.**
 
@@ -106,7 +110,9 @@ The original design used a 12V adapter to supply the motor and the input of the 
 
 **Why I originally chose it:** It provided the planned 12V output at a lower estimated cost than the larger options. That choice was based on the original voltage assumption.
 
-**What changes now:** The final supply must match the project’s voltage requirement and support the completed load calculation, including motor startup. The barrel-jack size, polarity, fuse, wiring, and connector ratings must match the selected supply.
+**What changes now:** The final supply must match the project’s voltage requirement and support the completed load calculation, including motor startup. Barrel-jack size, polarity, fuse, wiring, and connector ratings must match the selected supply.
+
+The preliminary budget gives 616mA operating current, or 770mA with a 25% margin, using explicitly assumed loads. This does not establish the current needed during startup or a stall. It also does not include the final H-bridge demand.
 
 Each board uses a local power connection. The pump board does not receive power through its ribbon connector.
 
@@ -114,11 +120,27 @@ Each board uses a local power connection. The pump board does not receive power 
 
 ## Controller and Communication
 
-The current design uses the PIC18F57Q43 Curiosity Nano. It provides the controller used in our project and the GPIO needed for the command inputs, motor output, and local debugging.
+The current design uses the PIC18F57Q43 Curiosity Nano, which I already have from lab work. It provides the GPIO needed for the command inputs, motor output, and local debugging. The project allows the Curiosity Nano to be used as the controller.
 
-The main controller sends CMD0 and CMD1 as two digital signals. My board reads the combination and performs the assigned pump action. The team still needs to finalize the four command assignments.
+The main controller sends CMD0 and CMD1 as two digital signals. My board reads their combination and performs the assigned pump action. The team still needs to finalize the four command assignments.
 
 The main controller receives the system’s measurement information and decides when to stop dispensing. My board controls the motor in response to its commands.
+
+UART and I²C are not used for inter-board commands.
+
+## Supporting Connections and Debugging
+
+| Component or Connection | Reason for Including It |
+|---|---|
+| Barrel jack | Provides a local DC power connection for the board. |
+| Fuse | Intended to limit damage from excessive current; its rating must be checked against startup current and wiring limits. |
+| Enable jumper | Provides a removable connection in the current motor-control path. |
+| Debug LED and series resistor | Provides a local visual indicator while limiting LED current. |
+| Debug button, pull-up resistor, and capacitor | Provides a local test input, a defined released state, and input filtering. Firmware may still need debounce handling. |
+| Spare header | Makes RD2, RD3, power, and ground available for local testing or a later assigned function. |
+| Common ground | Gives the controller, motor circuit, and inter-board signals a shared reference. |
+
+The flyback diode protects against motor-switching transients. It does not provide reverse-polarity protection at the barrel jack.
 
 ## Pin Assignments
 
@@ -148,30 +170,33 @@ These assignments match the updated schematic and block diagram.
 
 The motor connections above describe the current single-MOSFET circuit. They will change when the H-bridge is added. Package pinouts and footprints still need verification before board layout.
 
-## Planned MCC Configuration
+## MCC Configuration
 
-These are the settings the design requires. They are not a claim that the MCC configuration has already been completed.
+I configured the PIC18F57Q43 in MCC Melody and generated the initialization files. These settings match the GPIO connections in my current schematic.
 
-| Pin or Peripheral | Required Configuration |
-|---|---|
-| RC3 / CMD0 | Digital input; analog function disabled. |
-| RC2 / CMD1 | Digital input; analog function disabled. |
-| RA2 / Motor control | Digital output, initially low for the current MOSFET circuit. |
-| RD0 / Debug LED | Digital output. |
-| RD1 / Debug button | Digital input with the external pull-up shown in the schematic. |
-| RD2 and RD3 | Leave unassigned unless a function is added. |
-| PWM | Configure only if speed control is implemented; verify routing to the chosen output pin. |
-| Communication | GPIO command inputs; UART and I²C are not used for inter-board commands. |
+| Pin | Generated Name | Configuration | Purpose |
+|---|---|---|---|
+| RC3 | PUMP_CMD0 | Digital input | Command bit from ribbon pin 1. |
+| RC2 | PUMP_CMD1 | Digital input | Command bit from ribbon pin 2. |
+| RA2 | MOTOR_CNTRL | Digital output, initially low | Controls the current MOSFET circuit. |
+| RD0 | DEBUG_LED | Digital output, initially low | External debug LED. |
+| RD1 | DEBUG_BTN | Digital input | Debug button with the external pull-up shown in the schematic. |
 
-The final H-bridge may need additional control outputs and a different startup configuration. MCC settings and documentation must be updated to match that circuit.
+Analog functions, internal weak pull-ups, open-drain outputs, and interrupt-on-change are disabled for these five pins. The internal oscillator is configured for 64MHz. UART, I²C, and PWM are not configured.
+
+[Download the MPLAB X project and MCC configuration](Pump_Control_CB.X.zip)
+
+Code generation completed successfully. The generated program initializes the system but does not yet interpret commands or operate the pump. Compilation and hardware operation have not been verified. The configuration will need updating when the H-bridge is added.
 
 ## Remaining Design Work
 
 - Confirm a pump that meets the supply-voltage and reverse-operation requirements.
 - Select and add an H-bridge with suitable motor-current protection.
 - Resolve the 12V design assumption against the specified 9V adapter.
-- Complete the power budget, including motor startup and control-circuit load.
+- Replace the power-budget assumptions with documented limits or measurements.
+- Include the final H-bridge demand in the power budget.
 - Verify regulator temperature and Curiosity Nano external-power configuration.
+- Verify input protection, fuse selection, connector ratings, and component footprints.
 - Finalize CMD0/CMD1 assignments with the main-controller designer.
-- Complete and document the MCC configuration.
+- Update the MCC configuration when the final H-bridge connections are selected.
 - Update the schematic, block diagram, and component selections together after these decisions.
