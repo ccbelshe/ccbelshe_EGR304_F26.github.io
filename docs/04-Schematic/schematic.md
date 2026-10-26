@@ -19,13 +19,13 @@ My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control an R38
 
 ### Power Supply
 
-J1 provides the local power input through fuse F1. U1 is the L7805 regulator for the planned 5 V control supply. C1 and C2 support the regulator, while C4 provides local supply decoupling.
+Power enters through barrel jack J1 and fuse F1. U1 is the L7805 regulator that provides the planned 5 V supply for the controller. C1 and C2 help keep the regulator input and output stable. C4 provides additional decoupling near the controller.
 
-The schematic currently assumes a 12 V input. The intended supply needs confirmation against the course's specified 9 V adapter.
+My current schematic uses a 12 V input. I still need to resolve that choice with the course requirement for a 9 V adapter.
 
 ### Command Inputs
 
-The pump board receives two digital command bits from the main controller:
+The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations.
 
 | Signal | Connector | PIC port |
 |---|---|---|
@@ -33,22 +33,24 @@ The pump board receives two digital command bits from the main controller:
 | PUMP_CMD1 | J3 pin 2 | RC2 |
 | Shared ground | J3 pin 8 | GND |
 
-RC2 and RC3 will be configured as digital inputs. Their UART descriptions identify alternate pin functions. The four command meanings still need team agreement.
+RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. Our team still needs to agree on what each command combination means.
 
-Ribbon pins 1–5 are digital I/O, pins 6–7 are analog, and pin 8 is ground. No power is distributed through the ribbon.
+The ribbon uses pins 1–5 for digital I/O, pins 6–7 for analog, and pin 8 for ground. Each board has its own power connection.
 
-### Pump Switching
+### Pump Control
 
-The PIC's RA2 output connects through JP1 and gate resistor R1 to MOSFET Q1. Q1 switches the pump's return path to ground. R2 pulls the gate toward ground when it is not driven.
+The PIC controls Q1 through its RA2 output, jumper JP1, and resistor R1. Q1 acts as a switch in the pump's return path to ground. This lets the PIC control the pump without carrying the motor current through a GPIO pin.
 
-D1 provides a recirculation path for motor current when Q1 switches off. J2 connects the pump. Opening JP1 disconnects the controller's gate-drive path.
+R1 limits current into the MOSFET gate during switching. R2 pulls the gate toward ground when it is not driven, helping keep Q1 off. D1 gives the motor current a path when Q1 switches off. The pump connects at J2.
 
-### Testing and Expansion
+Opening JP1 disconnects the PIC from the gate-drive path so that connection can be isolated during testing.
 
-D2 and R3 provide a controller-driven LED. SW1, R4, and C3 form a local button-input circuit. Their firmware functions remain to be defined. J4 provides spare GPIO and local power connections.
+### Testing and Spare Connections
 
-## Remaining Design Work
+D2 is a debug LED with current-limiting resistor R3. SW1 provides a local button input, with R4 pulling the input high and C3 providing filtering. I still need to define the LED and button functions in the program.
 
-The current motor circuit supports one-direction switching. Forward/reverse operation requires a bidirectional driver revision and verification of pump compatibility. Supply voltage and command definitions remain to be finalized.
+J4 brings out spare GPIO pins, 5 V, and ground for local testing or expansion.
 
+## Changes Still Needed
 
+The current MOSFET circuit controls the pump in one direction. I still need to revise the driver for forward and reverse operation and check whether the selected pump can move water in reverse. The supply voltage and command meanings also need to be finalized.
