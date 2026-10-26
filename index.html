@@ -27,7 +27,7 @@
 
     
       
-        <title>Welcome - EGR 304 Clay Data Sheet</title>
+        <title>Pump Control — Clay Belsher - EGR 304 Clay Data Sheet</title>
       
     
     
@@ -81,7 +81,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#introduction" class="md-skip">
+        <a href="#fill-a-bot-pump-control" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Welcome
+              Pump Control — Clay Belsher
             
           </span>
         </div>
@@ -198,7 +198,7 @@
   
     
   
-  Welcome
+  Pump Control — Clay Belsher
 
       </a>
     </li>
@@ -388,12 +388,14 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
   <span class="md-ellipsis">
-    Welcome
+    Pump Control — Clay Belsher
   </span>
   
 
@@ -404,7 +406,7 @@
         
   
   <span class="md-ellipsis">
-    Welcome
+    Pump Control — Clay Belsher
   </span>
   
 
@@ -416,6 +418,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -424,16 +428,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Introduction
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Introduction">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#project-summary" class="md-nav__link">
     <span class="md-ellipsis">
       Project Summary
@@ -441,25 +435,29 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#my-contribution" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#my-subsystem" class="md-nav__link">
     <span class="md-ellipsis">
-      My Contribution
+      My Subsystem
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#design-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Documentation
+    </span>
+  </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#assignment-pages" class="md-nav__link">
+  <a href="#current-status" class="md-nav__link">
     <span class="md-ellipsis">
-      Assignment Pages
+      Current Status
     </span>
   </a>
   
@@ -776,6 +774,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -784,16 +784,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Introduction
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Introduction">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#project-summary" class="md-nav__link">
     <span class="md-ellipsis">
       Project Summary
@@ -801,25 +791,29 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#my-contribution" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#my-subsystem" class="md-nav__link">
     <span class="md-ellipsis">
-      My Contribution
+      My Subsystem
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#design-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Documentation
+    </span>
+  </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#assignment-pages" class="md-nav__link">
+  <a href="#current-status" class="md-nav__link">
     <span class="md-ellipsis">
-      Assignment Pages
+      Current Status
     </span>
   </a>
   
@@ -848,36 +842,23 @@
   
 
 
-  <h1>Welcome</h1>
-
-<p><center>
-<font size= "6">Clay Belsher Datasheet</font><br>
-as part of<br>
-<font size= "8"> Git Project</font><br>
-for<br>
-<font size= "5"> Team 201 </font><br></p>
-<p><strong>Submission: September, 02, 2026</strong>
-</center></p>
-<h2 id="introduction">Introduction</h2>
+<h1 id="fill-a-bot-pump-control">Fill-A-Bot Pump Control</h1>
+<p><strong>Clay Belsher — EGR 304</strong></p>
+<h2 id="project-summary">Project Summary</h2>
+<p>Fill-A-Bot is an automated water-dispensing system designed to fill a container to a selected amount. The team’s subsystems handle user commands, measurement, and pump operation. The main controller coordinates these functions and determines when dispensing should stop. My contribution is the pump-control board, which receives two digital command signals and controls the motor circuit.</p>
+<h2 id="my-subsystem">My Subsystem</h2>
+<p>My board uses a PIC18F57Q43 Curiosity Nano, a local power input, a 5V linear regulator, and a motor-switching circuit. The main controller sends CMD0 to RC3 and CMD1 to RC2 through the ribbon connector. Ribbon pin 8 provides a common ground.</p>
+<p>The current schematic uses a single MOSFET for one-direction motor control. Forward-and-reverse operation requires an H-bridge revision. The original 12V supply assumption also needs to be reconciled with the project’s specified 9V adapter.</p>
+<h2 id="design-documentation">Design Documentation</h2>
 <ul>
-<li>This needs to be updated so that a reader gets an idea of the purpose of this datasheet.</li>
+<li><a href="01-Block-Diagram/Block-Diagram/">Block Diagram</a> — subsystem connections and design decisions.</li>
+<li><a href="02-Component-Selection/Component-Selection/">Component Selection and MCC Configuration</a> — component comparisons, selection reasons, and generated GPIO configuration.</li>
+<li><a href="03-BOM/BOM/">Bill of Materials</a> — component-list page.</li>
+<li><a href="04-Schematic/schematic/">Schematic</a> — circuit explanation, schematic image, PDF, and KiCad project.</li>
+<li><a href="05-Power-Budget/Power-Budget/">Power Budget</a> — preliminary calculations, assumptions, and Excel downloads.</li>
 </ul>
-<h3 id="project-summary">Project Summary</h3>
-<ul>
-<li>This needs to be updated to reflect <ins>your version</ins> of the team project, so when shared not via the team's report, the reader gets an idea of the direction of the project and how your work will contribute to the overall success.</li>
-<li>Add context that ties into the link to your <a href="https://embedded-systems-design.github.io/EGR304TeamTemplate/">team report.</a></li>
-</ul>
-<h3 id="my-contribution">My Contribution</h3>
-<ul>
-<li>This needs to be updated to reflect a team introduction</li>
-<li>Content should also help an unfamiliar reader navigate to areas of interest. Information like:</li>
-</ul>
-<p>To review the details listed of the material used to construct the subsection, you can review it in the <a href="https://embedded-systems-design.github.io/EGR304DataSheetTemplate/03-BOM/BOM/">"BOM"</a> section of the datasheet.</p>
-<h2 id="assignment-pages">Assignment Pages</h2>
-<ul>
-<li><a href="02-Component-Selection/Component-Selection/">Component Selection</a></li>
-<li><a href="05-Power-Budget/Power-Budget/">Power Budget</a></li>
-</ul>
+<h2 id="current-status">Current Status</h2>
+<p>The updated GPIO configuration has been generated in MCC. Hardware operation has not been verified, and the power budget uses labeled planning assumptions. The final pump, H-bridge, supply choice, and command assignments remain open design decisions.</p>
 
 
 
