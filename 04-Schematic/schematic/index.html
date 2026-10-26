@@ -660,9 +660,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pending-verification" class="md-nav__link">
+  <a href="#circuit-operation" class="md-nav__link">
     <span class="md-ellipsis">
-      Pending Verification
+      Circuit Operation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Circuit Operation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power-supply" class="md-nav__link">
+    <span class="md-ellipsis">
+      Power Supply
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Inputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pump-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pump Switching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-and-expansion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing and Expansion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-design-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remaining Design Work
     </span>
   </a>
   
@@ -838,9 +889,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pending-verification" class="md-nav__link">
+  <a href="#circuit-operation" class="md-nav__link">
     <span class="md-ellipsis">
-      Pending Verification
+      Circuit Operation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Circuit Operation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power-supply" class="md-nav__link">
+    <span class="md-ellipsis">
+      Power Supply
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Inputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pump-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pump Switching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-and-expansion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing and Expansion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-design-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remaining Design Work
     </span>
   </a>
   
@@ -880,7 +982,47 @@
 <li><a href="../CB_Pump_Control.pdf">Schematic PDF</a></li>
 <li><a href="../CB_Pump_Control.zip">Complete KiCad project ZIP</a></li>
 </ul>
-<h2 id="pending-verification">Pending Verification</h2>
+<h2 id="circuit-operation">Circuit Operation</h2>
+<h3 id="power-supply">Power Supply</h3>
+<p>J1 provides the local power input through fuse F1. U1 is the L7805 regulator for the planned 5 V control supply. C1 and C2 support the regulator, while C4 provides local supply decoupling.</p>
+<p>The schematic currently assumes a 12 V input. The intended supply needs confirmation against the course's specified 9 V adapter.</p>
+<h3 id="command-inputs">Command Inputs</h3>
+<p>The pump board receives two digital command bits from the main controller:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Connector</th>
+<th>PIC port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PUMP_CMD0</td>
+<td>J3 pin 1</td>
+<td>RC3</td>
+</tr>
+<tr>
+<td>PUMP_CMD1</td>
+<td>J3 pin 2</td>
+<td>RC2</td>
+</tr>
+<tr>
+<td>Shared ground</td>
+<td>J3 pin 8</td>
+<td>GND</td>
+</tr>
+</tbody>
+</table>
+<p>RC2 and RC3 will be configured as digital inputs. Their UART descriptions identify alternate pin functions. The four command meanings still need team agreement.</p>
+<p>Ribbon pins 1–5 are digital I/O, pins 6–7 are analog, and pin 8 is ground. No power is distributed through the ribbon.</p>
+<h3 id="pump-switching">Pump Switching</h3>
+<p>The PIC's RA2 output connects through JP1 and gate resistor R1 to MOSFET Q1. Q1 switches the pump's return path to ground. R2 pulls the gate toward ground when it is not driven.</p>
+<p>D1 provides a recirculation path for motor current when Q1 switches off. J2 connects the pump. Opening JP1 disconnects the controller's gate-drive path.</p>
+<h3 id="testing-and-expansion">Testing and Expansion</h3>
+<p>D2 and R3 provide a controller-driven LED. SW1, R4, and C3 form a local button-input circuit. Their firmware functions remain to be defined. J4 provides spare GPIO and local power connections.</p>
+<h2 id="remaining-design-work">Remaining Design Work</h2>
+<p>The current motor circuit supports one-direction switching. Forward/reverse operation requires a bidirectional driver revision and verification of pump compatibility. Supply voltage and command definitions remain to be finalized.</p>
 
 
 
