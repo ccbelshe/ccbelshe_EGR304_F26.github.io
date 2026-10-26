@@ -122,7 +122,7 @@ Each board uses a local power connection. The pump board does not receive power 
 
 The current design uses the PIC18F57Q43 Curiosity Nano, which I already have from lab work. It provides the GPIO needed for the command inputs, motor output, and local debugging. The project allows the Curiosity Nano to be used as the controller.
 
-The main controller sends CMD0 and CMD1 as two digital signals. My board reads their combination and performs the assigned pump action. The team still needs to finalize the four command assignments.
+The main controller sends C1 and C0 as two digital signals. C1 connects from ribbon pin 1 to RC3, and C0 connects from ribbon pin 2 to RC2. Read as C1 C0, 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. UART and I²C are not used for inter-board commands.
 
 The main controller receives the system’s measurement information and decides when to stop dispensing. My board controls the motor in response to its commands.
 
