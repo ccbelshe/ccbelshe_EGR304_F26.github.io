@@ -30,9 +30,8 @@ The barrel jack supplies power locally. The L7805 provides a 5V supply for the c
 | RA2 → MOSFET gate circuit | Motor control output |
 
 ## Design Decisions
-
-Two digital inputs provide four possible command combinations with simple pin-to-pin communication. The main controller will determine when the pump runs and stops. The team still needs to finalize the command assignments.
-
+The main controller sends a two-bit pump command, written as C1 C0. Ribbon pin 1 carries C1 to RC3, and ribbon pin 2 carries C0 to RC2. The commands are 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. The pump runs only while the command is 01. Ribbon pin 8 provides common ground.
+ 
 The motor uses a separate power path because it requires more current than a microcontroller pin can supply. All control and motor grounds share a common reference.
 
 ## Remaining Design Work
