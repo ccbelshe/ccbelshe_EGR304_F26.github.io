@@ -987,7 +987,7 @@
 <p>Power enters through barrel jack J1 and fuse F1. U1 is the L7805 regulator that provides the planned 5 V supply for the controller. C1 and C2 help keep the regulator input and output stable. C4 provides additional decoupling near the controller.</p>
 <p>My current schematic uses a 12 V input. I still need to resolve that choice with the course requirement for a 9 V adapter.</p>
 <h3 id="command-inputs">Command Inputs</h3>
-<p>The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations.</p>
+<p>The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations. The finalized pump command is read as C1 C0: 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. C1 enters through J3 pin 1 at RC3, and C0 enters through J3 pin 2 at RC2. The pump runs only while the command is 01.</p>
 <table>
 <thead>
 <tr>
@@ -1014,7 +1014,7 @@
 </tr>
 </tbody>
 </table>
-<p>RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. Our team still needs to agree on what each command combination means.</p>
+<p>RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. </p>
 <p>The ribbon uses pins 1–5 for digital I/O, pins 6–7 for analog, and pin 8 for ground. Each board has its own power connection.</p>
 <h3 id="pump-control">Pump Control</h3>
 <p>The PIC controls Q1 through its RA2 output, jumper JP1, and resistor R1. Q1 acts as a switch in the pump's return path to ground. This lets the PIC control the pump without carrying the motor current through a GPIO pin.</p>
