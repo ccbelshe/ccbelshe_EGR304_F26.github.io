@@ -1,37 +1,29 @@
 ---
-title: Welcome
-tags:
-- tag1
-- tag2
+title: Pump Control — Clay Belsher
 ---
-<center>
-<font size= "6">Clay Belsher Datasheet</font><br>
-as part of<br>
-<font size= "8"> Git Project</font><br>
-for<br>
-<font size= "5"> Team 201 </font><br>
 
-**Submission: September, 02, 2026**
-</center>
+# Fill-A-Bot Pump Control
 
-## Introduction
+**Clay Belsher — EGR 304**
 
-* This needs to be updated so that a reader gets an idea of the purpose of this datasheet.
+## Project Summary
 
-### Project Summary
+Fill-A-Bot is an automated water-dispensing system designed to fill a container to a selected amount. The team’s subsystems handle user commands, measurement, and pump operation. The main controller coordinates these functions and determines when dispensing should stop. My contribution is the pump-control board, which receives two digital command signals and controls the motor circuit.
 
-* This needs to be updated to reflect <ins>your version</ins> of the team project, so when shared not via the team's report, the reader gets an idea of the direction of the project and how your work will contribute to the overall success.
-* Add context that ties into the link to your [team report.](https://embedded-systems-design.github.io/EGR304TeamTemplate/)
+## My Subsystem
 
+My board uses a PIC18F57Q43 Curiosity Nano, a local power input, a 5V linear regulator, and a motor-switching circuit. The main controller sends CMD0 to RC3 and CMD1 to RC2 through the ribbon connector. Ribbon pin 8 provides a common ground.
 
-### My Contribution
+The current schematic uses a single MOSFET for one-direction motor control. Forward-and-reverse operation requires an H-bridge revision. The original 12V supply assumption also needs to be reconciled with the project’s specified 9V adapter.
 
-* This needs to be updated to reflect a team introduction
-* Content should also help an unfamiliar reader navigate to areas of interest. Information like:
+## Design Documentation
 
-To review the details listed of the material used to construct the subsection, you can review it in the ["BOM"](https://embedded-systems-design.github.io/EGR304DataSheetTemplate/03-BOM/BOM/) section of the datasheet.
+- [Block Diagram](01-Block-Diagram/Block-Diagram.md) — subsystem connections and design decisions.
+- [Component Selection and MCC Configuration](02-Component-Selection/Component-Selection.md) — component comparisons, selection reasons, and generated GPIO configuration.
+- [Bill of Materials](03-BOM/BOM.md) — component-list page.
+- [Schematic](04-Schematic/schematic.md) — circuit explanation, schematic image, PDF, and KiCad project.
+- [Power Budget](05-Power-Budget/Power-Budget.md) — preliminary calculations, assumptions, and Excel downloads.
 
-## Assignment Pages
+## Current Status
 
-- [Component Selection](02-Component-Selection/Component-Selection.md)
-- [Power Budget](05-Power-Budget/Power-Budget.md)
+The updated GPIO configuration has been generated in MCC. Hardware operation has not been verified, and the power budget uses labeled planning assumptions. The final pump, H-bridge, supply choice, and command assignments remain open design decisions.
