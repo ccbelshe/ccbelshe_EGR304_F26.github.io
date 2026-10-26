@@ -872,7 +872,7 @@
   <h1>Schematics</h1>
 
 <h2 id="overview">Overview</h2>
-<p>My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control a 12 V R385 pump through a MOSFET driver. It includes a 5 V regulator, fuse, flyback diode, UART interface, and debugging components.</p>
+<p>My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control an R385 pump through a MOSFET switching circuit. It receives a two-bit digital command from the main controller through PUMP_CMD0 on RC3 and PUMP_CMD1 on RC2. The board includes a local power input, 5 V regulator, fuse, flyback diode, and debugging components. The current motor circuit supports one-direction operation; forward/reverse control remains a planned revision.</p>
 <h2 id="schematic">Schematic</h2>
 <p><img src="https://raw.githubusercontent.com/ccbelshe/ccbelshe_EGR304_F26.github.io/main/docs/04-Schematic/CB_Pump_Control.png" alt="Pump schematic" class="skip-glightbox" style="width:100%;"></p>
 <h2 id="downloads">Downloads</h2>
@@ -881,7 +881,6 @@
 <li><a href="../CB_Pump_Control.zip">Complete KiCad project ZIP</a></li>
 </ul>
 <h2 id="pending-verification">Pending Verification</h2>
-<p>The fuse rating, PWM/gate-drive performance, footprint assignments, and team UART pinout require verification before fabrication.</p>
 
 
 
