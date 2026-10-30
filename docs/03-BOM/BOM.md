@@ -186,17 +186,9 @@ Any changes needed after testing will be updated in the schematic and BOM.
 
 ## Project Information
 
+**Project:** Fill-A-Bot  
+**Course:** EGR304 – Fall 2026  
+**Subsystem:** Pump Control  
 **Student:** Clay Belsher
 
-**Email:** ccbelshe@asu.edu
-
-**Course:** EGR304 - Fall 2026
-
-**Project:** Fill-A-Bot
-
-**Subsystem:** Pump Control
-
-**Schematic:** CB_Pump_Control.kicad_sch
-
-**KiCad BOM Export:** CB_Pump_Control.csv
-
+The component list was exported from my KiCad schematic and updated to include the parts needed for the pump assembly.
