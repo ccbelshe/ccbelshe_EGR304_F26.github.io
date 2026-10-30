@@ -180,11 +180,9 @@ Prices are estimates from the prepared purchase requests and may change before t
 
 ## Testing and Verification
 
-Once the components arrive, I will verify the motor driver connections, pump current, power regulation, and communication signals.
+Once the parts arrive, I'll test the pump with the motor driver and check the current draw. I'll also verify the 5V regulator output and make sure the ribbon connections work with the other boards.
 
-The ribbon connector arrangement and final PCB footprints will also be checked against the physical components.
-
-The purpose of this hardware order is to obtain the components needed for prototyping and subsystem development.
+Any changes needed after testing will be updated in the schematic and BOM.
 
 ## Project Information
 
