@@ -11,15 +11,15 @@ tags:
 
 ## Overview
 
-This page documents the Bill of Materials (BOM) for my Fill-A-Bot pump-control subsystem. My board uses a PIC18F57Q43 Curiosity Nano microcontroller and a DRV8871 H-bridge motor driver to control a 12V DC water pump.
+This page documents the Bill of Materials (BOM) for my Fill-A-Bot pump-control subsystem in EGR304.
 
-The circuit includes local power regulation, fuse protection, digital communication through an eight-pin ribbon connector, and debugging components.
+My subsystem uses a PIC18F57Q43 Curiosity Nano microcontroller and a DRV8871 H-bridge motor driver to control a 12V DC water pump. The circuit includes a 5V voltage regulator, fuse protection, an eight-pin ribbon interface, and debugging components.
 
-The following table is based on my KiCad schematic export, `CB_Pump_Control.csv`. All schematic components are included, even if they are already owned or supplied by the electronics laboratory.
+The BOM is based on my KiCad schematic and exported component list. Components already owned or available in the electronics lab are included but do not need to be purchased again.
 
 ## Complete Bill of Materials
 
-| Reference | Component / Value | Qty | Purchase Qty | Source / Status |
+| Reference | Component / Value | Design Qty | Purchase Qty | Source / Status |
 |---|---|---:|---:|---|
 | C1 | 0.33 uF, 25V capacitor | 1 | 0 | Lab supplied |
 | C2 | 0.1 uF, 16V capacitor | 1 | 0 | Lab supplied |
@@ -28,96 +28,177 @@ The following table is based on my KiCad schematic export, `CB_Pump_Control.csv`
 | C5 | 0.1 uF, 50V capacitor | 1 | 0 | Lab supplied |
 | C6 | 47 uF, 25V capacitor | 1 | 0 | Lab supplied |
 | D2 | Debug LED | 1 | 0 | Lab supplied |
-| F1 | 1A slow-blow fuse | 1 | TBD | Verify lab stock |
-| J1 | DC barrel jack | 1 | 1 | Purchase |
-| J2 | Pump connector, 2-pin | 1 | 1 | Purchase |
-| J3 | Team interface, 2x4 header | 1 | 1 | Purchase |
-| J4 | Spare GPIO, 1x4 header | 1 | 1 | Purchase if needed |
-| JP1 | Pump enable, 2-pin jumper | 1 | 1 | Purchase if needed |
+| F1 | 1A slow-blow fuse | 1 | 3 | DigiKey |
+| J1 | DC barrel jack | 1 | 1 | DigiKey |
+| J2 | 2-pin pump connector | 1 | 1 | DigiKey |
+| J3 | 2x4 ribbon header | 1 | 3 | DigiKey |
+| J4 | 1x4 spare GPIO header | 1 | 0 | Lab stock |
+| JP1 | 2-pin pump enable jumper | 1 | 0 | Lab stock |
 | R1 | 68k ohm resistor | 1 | 0 | Lab supplied |
 | R2 | 10k ohm resistor | 1 | 0 | Lab supplied |
 | R3 | 1k ohm, 0.25W resistor | 1 | 0 | Lab supplied |
 | R4 | 10k ohm, 0.25W resistor | 1 | 0 | Lab supplied |
 | SW1 | Pushbutton switch | 1 | 0 | Lab supplied |
-| TP1, TP2, TP3 | PCB test points | 3 | 0 | PCB pads |
-| U1 | L7805 5V voltage regulator | 1 | TBD | Verify lab stock |
+| TP1 | Test point | 1 | 0 | Lab supplied |
+| TP2, TP3 | Test points | 2 | 0 | Lab supplied |
+| U1 | L7805 5V voltage regulator | 1 | 0 | Lab stock |
 | U2 | PIC18F57Q43 Curiosity Nano | 1 | 0 | Already owned |
-| U3 | DRV8871DDA H-bridge driver | 1 | 3 | Purchase, including prototype and spare |
+| U3 | DRV8871 H-bridge motor driver | 1 | 3 | DigiKey |
 
-**Note:** The exported KiCad BOM contains 23 rows representing 24 individual component instances. Purchase quantities are preliminary and will be finalized in the purchase request.
+The KiCad BOM contains 23 grouped entries representing 24 individual component instances.
 
-## External Pump Assembly Components
+## Additional Pump Assembly Components
 
-These components are required for the complete pump assembly but are not all represented as separate schematic symbols.
+These components are needed to assemble and operate the subsystem but are not all represented as separate schematic components.
 
-| Component | Qty | Purpose |
-|---|---:|---|
-| R385 12V DC water pump | 1 | Dispenses water |
-| Regulated 12V DC power adapter | 1 | Powers the pump-control board |
-| Eight-conductor ribbon cable assembly | 1 | Connects team subsystems |
-| Mating connectors and jumper caps | As needed | Electrical connections |
-| Tubing and fittings | As needed | Water connections |
+| Component | Quantity | Source | Notes |
+|---|---:|---|---|
+| Gikfun EK1912 R385 12V water pump kit | 1 | Amazon | $18.98 |
+| 12V DC power adapter | 1 | Included with pump kit | No separate purchase |
+| Water tubing and fittings | 1 set | Included with pump kit | No separate purchase |
+| 8-pin IDC ribbon sockets | 4 | DigiKey | For ribbon connections |
+| 8-conductor ribbon cable | 5 feet | DigiKey | Team communication |
+| 5x20 mm fuse holders | 2 | DigiKey | For 1A fuse |
+
+### Selected Pump
+
+The selected pump is the Gikfun EK1912 R385 diaphragm water pump kit.
+
+- Vendor: Amazon
+- Quantity: 1
+- Price: $18.98
+- Supply voltage: 12V
+- Includes a power adapter and tubing
+
+[Amazon Gikfun EK1912 Pump Kit](https://www.amazon.com/dp/B07DW4WRV8)
+
+The pump is intended for prototyping and testing the liquid dispensing system. Its startup current will be checked during testing.
 
 ## Major Component Selection
 
 ### Microcontroller
 
-The PIC18F57Q43 Curiosity Nano receives digital commands from the main controller and controls the motor driver. This development board is already owned and does not need to be purchased.
+The PIC18F57Q43 Curiosity Nano receives control signals from the other subsystems and sends the required signals to the motor driver.
 
-### Motor Driver
+I already have this microcontroller, so it does not need to be ordered.
 
-The DRV8871 H-bridge motor driver provides forward and reverse motor control. This supports the project's motor-direction requirements.
+### H-Bridge Motor Driver
 
-The schematic uses a 68k ohm current-limit resistor. The nominal current-trip calculation is:
+The DRV8871 H-bridge controls the direction and operation of the DC pump motor.
+
+The selected DigiKey ordering part is DRV8871DDAR.
+
+- Manufacturer: Texas Instruments
+- Quantity ordered: 3
+- Unit price: $2.98
+- Total: $8.94
+
+[DigiKey DRV8871 Motor Driver](https://www.digikey.com/en/products/detail/texas-instruments/DRV8871DDAR/5639726)
+
+The schematic uses a 68k ohm current-limit resistor.
+
+The nominal current-trip calculation is:
 
 `I_TRIP = 64 / 68 = 0.94 A`
 
-This value is provisional until the pump's startup and stall current are verified.
+This is a preliminary value until the pump's operating and startup current are tested.
 
 [DRV8871 Datasheet](https://www.ti.com/lit/ds/symlink/drv8871.pdf)
 
-### Power Supply
+### Fuse Protection
 
-The board uses a local 12V power input through a barrel jack. The motor receives power from the 12V supply, while an L7805 regulator provides a 5V control rail.
+The board includes a 1A slow-blow fuse to protect the power input.
 
-A 1A slow-blow fuse is included for input protection. The final power adapter and fuse rating must be checked against the selected pump's current requirements.
+The selected fuse is the Littelfuse 0218001.MXP.
+
+- Vendor: DigiKey
+- Quantity ordered: 3
+- Unit price: $1.56
+- Total: $4.68
+
+[DigiKey 1A Slow-Blow Fuse](https://www.digikey.com/en/products/detail/littelfuse-inc/0218001-MXP/777598)
+
+Two compatible fuse holders are included in the hardware order.
+
+The final fuse rating will be checked against the pump's current requirements during testing.
+
+### Power Regulation
+
+The subsystem uses a 12V DC supply to operate the motor driver and pump.
+
+An L7805 voltage regulator provides a regulated 5V rail for the control circuitry.
+
+The selected pump kit includes a 12V adapter, so a separate 9V or 12V adapter is not included in the current purchase request.
 
 ### Team Communication
 
-The pump-control board communicates through an eight-pin ribbon connector.
+The subsystem uses an eight-pin ribbon connector to communicate with the other Fill-A-Bot boards.
 
-The class interface assigns pins 1 through 5 to digital signals, pins 6 and 7 to analog signals, and pin 8 to common ground.
+The planned interface uses:
 
-The motor commands are:
+- Pins 1-5: Digital signals
+- Pins 6-7: Analog signals
+- Pin 8: Common ground
 
-- `00` = Stop
-- `01` = Forward
-- `11` = Reverse
+Power is supplied locally rather than shared between subsystem boards.
 
-Communication uses direct logic-level signals rather than I2C or UART.
+The planned motor-control commands are:
+
+- 00 = Stop
+- 01 = Forward
+- 11 = Reverse
+
+The team uses direct pin-to-pin communication rather than I2C or UART.
 
 ## Purchasing Plan
 
-The hardware order focuses on missing major components rather than common components already available in the lab.
+Purchase requests have been prepared using the EGR304 purchasing template.
 
-The main purchasing priorities are the DRV8871 motor driver, R385 water pump, compatible 12V power supply, barrel jack, and required connectors.
+The hardware order is divided between two vendors.
 
-Parts will be organized by vendor using the EGR304 purchase request template. Final prices, product links, and availability will be recorded on the purchase request forms.
+### DigiKey
 
-## Verification and Future Testing
+The DigiKey request includes the motor driver, fuses, fuse holders, barrel jack, pump connector, ribbon headers, IDC sockets, and ribbon cable.
 
-The KiCad schematic and BOM have been prepared for the hardware ordering assignment.
+Estimated subtotal: $25.14 before tax and shipping.
 
-Before PCB fabrication, footprints must be matched to the physical components being purchased. The pump's startup current, reversal behavior, and electrical connections must also be tested.
+### Amazon
 
-## Documentation
+The Amazon request includes one Gikfun EK1912 R385 water pump kit.
+
+Estimated subtotal: $18.98 before tax and shipping.
+
+### Combined Estimated Cost
+
+| Vendor | Estimated Subtotal |
+|---|---:|
+| DigiKey | $25.14 |
+| Amazon | $18.98 |
+| **Total** | **$44.12** |
+
+Prices are estimates from the prepared purchase requests and may change before the orders are approved.
+
+## Testing and Verification
+
+Once the components arrive, I will verify the motor driver connections, pump current, power regulation, and communication signals.
+
+The ribbon connector arrangement and final PCB footprints will also be checked against the physical components.
+
+The purpose of this hardware order is to obtain the components needed for prototyping and subsystem development.
+
+## Project Information
+
+**Student:** Clay Belsher
+
+**Email:** ccbelshe@asu.edu
+
+**Course:** EGR304 - Fall 2026
 
 **Project:** Fill-A-Bot
 
 **Subsystem:** Pump Control
 
-**Course:** EGR 304, Fall 2026
+**Schematic:** CB_Pump_Control.kicad_sch
 
-**KiCad schematic:** `CB_Pump_Control.kicad_sch`
+**KiCad BOM Export:** CB_Pump_Control.csv
 
-**KiCad BOM export:** `CB_Pump_Control.csv`
