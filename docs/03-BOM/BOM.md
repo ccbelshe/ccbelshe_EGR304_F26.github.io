@@ -11,11 +11,9 @@ tags:
 
 ## Overview
 
-This page documents the Bill of Materials (BOM) for my Fill-A-Bot pump-control subsystem in EGR304.
+This is the bill of materials for my Fill-A-Bot pump-control subsystem. It includes the components from my KiCad schematic, the parts needed for the pump assembly, and the hardware being ordered for testing.
 
-My subsystem uses a PIC18F57Q43 Curiosity Nano microcontroller and a DRV8871 H-bridge motor driver to control a 12V DC water pump. The circuit includes a 5V voltage regulator, fuse protection, an eight-pin ribbon interface, and debugging components.
-
-The BOM is based on my KiCad schematic and exported component list. Components already owned or available in the electronics lab are included but do not need to be purchased again.
+Most of the basic components are already available in the lab. The larger components and connectors are included in the purchase requests.
 
 ## Complete Bill of Materials
 
@@ -49,98 +47,89 @@ The KiCad BOM contains 23 grouped entries representing 24 individual component i
 
 ## Additional Pump Assembly Components
 
-These components are needed to assemble and operate the subsystem but are not all represented as separate schematic components.
+These parts are needed for the pump assembly, connections, and breadboard testing. They are listed separately because they are not all individual components in the KiCad schematic.
 
 | Component | Quantity | Source | Notes |
 |---|---:|---|---|
 | Gikfun EK1912 R385 12V water pump kit | 1 | Amazon | $18.98 |
 | 12V DC power adapter | 1 | Included with pump kit | No separate purchase |
 | Water tubing and fittings | 1 set | Included with pump kit | No separate purchase |
+| Adafruit DRV8871 breakout board | 1 | DigiKey | Breadboard testing |
 | 8-pin IDC ribbon sockets | 4 | DigiKey | For ribbon connections |
 | 8-conductor ribbon cable | 5 feet | DigiKey | Team communication |
-| 5x20 mm fuse holders | 2 | DigiKey | For 1A fuse |
+| 5x20 mm fuse holders | 2 | DigiKey | For the 1A fuse |
 
-### Selected Pump
-
-The selected pump is the Gikfun EK1912 R385 diaphragm water pump kit.
-
-- Vendor: Amazon
-- Quantity: 1
-- Price: $18.98
-- Supply voltage: 12V
-- Includes a power adapter and tubing
-
-[Amazon Gikfun EK1912 Pump Kit](https://www.amazon.com/dp/B07DW4WRV8)
-
-The pump is intended for prototyping and testing the liquid dispensing system. Its startup current will be checked during testing.
-
-## Major Component Selection
+## Component Selection
 
 ### Microcontroller
 
-The PIC18F57Q43 Curiosity Nano receives control signals from the other subsystems and sends the required signals to the motor driver.
+I'm using the PIC18F57Q43 Curiosity Nano for the control logic. It receives signals from the other boards and sends the motor-control signals to the H-bridge.
 
-I already have this microcontroller, so it does not need to be ordered.
+I already have the PIC, so it does not need to be ordered.
 
-### H-Bridge Motor Driver
+### Motor Driver
 
-The DRV8871 H-bridge controls the direction and operation of the DC pump motor.
+The DRV8871 H-bridge controls the pump motor. It allows the motor to run in either direction, which is needed for the forward and reverse operation.
 
-The selected DigiKey ordering part is DRV8871DDAR.
+Three DRV8871DDAR chips are included in the DigiKey request for the PCB and spares.
 
-- Manufacturer: Texas Instruments
-- Quantity ordered: 3
-- Unit price: $2.98
-- Total: $8.94
+[DRV8871 Motor Driver - DigiKey](https://www.digikey.com/en/products/detail/texas-instruments/DRV8871DDAR/5639726)
 
-[DigiKey DRV8871 Motor Driver](https://www.digikey.com/en/products/detail/texas-instruments/DRV8871DDAR/5639726)
-
-The schematic uses a 68k ohm current-limit resistor.
+The current-limit resistor is R1, which is 68k ohms.
 
 The nominal current-trip calculation is:
 
 `I_TRIP = 64 / 68 = 0.94 A`
 
-This is a preliminary value until the pump's operating and startup current are tested.
+This value will be checked once the pump is available for testing.
 
-[DRV8871 Datasheet](https://www.ti.com/lit/ds/symlink/drv8871.pdf)
+### Breadboard Testing
+
+The DRV8871DDAR is a surface-mount component, so it cannot plug directly into a breadboard.
+
+One Adafruit DRV8871 breakout board is included in the DigiKey order to make testing easier before assembling the PCB.
+
+The breakout board will be used to test the pump and motor-control signals. Header pins will need to be soldered before using it on a breadboard.
 
 ### Fuse Protection
 
-The board includes a 1A slow-blow fuse to protect the power input.
+The board uses a 1A slow-blow fuse on the power input.
 
-The selected fuse is the Littelfuse 0218001.MXP.
+Three Littelfuse 0218001.MXP fuses and two fuse holders are included in the DigiKey request.
 
-- Vendor: DigiKey
-- Quantity ordered: 3
-- Unit price: $1.56
-- Total: $4.68
+[1A Slow-Blow Fuse - DigiKey](https://www.digikey.com/en/products/detail/littelfuse-inc/0218001-MXP/777598)
 
-[DigiKey 1A Slow-Blow Fuse](https://www.digikey.com/en/products/detail/littelfuse-inc/0218001-MXP/777598)
+The fuse rating will be checked against the pump's actual current during testing.
 
-Two compatible fuse holders are included in the hardware order.
+### Power Supply
 
-The final fuse rating will be checked against the pump's current requirements during testing.
+The pump-control subsystem is designed around a 12V DC supply.
 
-### Power Regulation
+The L7805 voltage regulator provides 5V for the control circuitry. The pump kit includes a 12V adapter, so a separate power adapter is not being ordered.
 
-The subsystem uses a 12V DC supply to operate the motor driver and pump.
+### Pump
 
-An L7805 voltage regulator provides a regulated 5V rail for the control circuitry.
+The selected pump is the Gikfun EK1912 R385 12V diaphragm water pump kit.
 
-The selected pump kit includes a 12V adapter, so a separate 9V or 12V adapter is not included in the current purchase request.
+The kit includes the pump, power adapter, and tubing needed for initial testing.
+
+- Vendor: Amazon
+- Quantity: 1
+- Price: $18.98
+
+[Gikfun EK1912 Pump Kit - Amazon](https://www.amazon.com/dp/B07DW4WRV8)
 
 ### Team Communication
 
-The subsystem uses an eight-pin ribbon connector to communicate with the other Fill-A-Bot boards.
+The subsystem uses an eight-pin ribbon connector for communication with the other Fill-A-Bot boards.
 
-The planned interface uses:
+The planned connections are:
 
 - Pins 1-5: Digital signals
 - Pins 6-7: Analog signals
 - Pin 8: Common ground
 
-Power is supplied locally rather than shared between subsystem boards.
+Each board has its own power input. The boards communicate through direct pin-to-pin signals rather than I2C or UART.
 
 The planned motor-control commands are:
 
@@ -148,45 +137,21 @@ The planned motor-control commands are:
 - 01 = Forward
 - 11 = Reverse
 
-The team uses direct pin-to-pin communication rather than I2C or UART.
-
 ## Purchasing Plan
 
 The parts that aren't available in the lab are included in two purchase requests.
 
-**DigiKey:** Motor drivers, fuses, fuse holders, power connector, pump connector, and ribbon cable components.
+**DigiKey:** DRV8871 motor drivers, one Adafruit DRV8871 breakout board for breadboard testing, fuses, fuse holders, power connector, pump connector, and ribbon cable components.
 
 **Amazon:** Gikfun EK1912 R385 12V pump kit, including the power adapter and tubing.
 
 | Vendor | Estimated Cost |
 |---|---:|
-| DigiKey | $34.68 |
+| DigiKey | $42.18 |
 | Amazon | $18.98 |
-| **Total** | **$53.66** |
+| **Total** | **$61.16** |
 
-The purchase requests will be sent to the instructor for approval before ordering.
-
-### DigiKey
-
-The DigiKey request includes the motor driver, fuses, fuse holders, barrel jack, pump connector, ribbon headers, IDC sockets, and ribbon cable.
-
-Estimated subtotal: $25.14 before tax and shipping.
-
-### Amazon
-
-The Amazon request includes one Gikfun EK1912 R385 water pump kit.
-
-Estimated subtotal: $18.98 before tax and shipping.
-
-### Combined Estimated Cost
-
-| Vendor | Estimated Subtotal |
-|---|---:|
-| DigiKey | $25.14 |
-| Amazon | $18.98 |
-| **Total** | **$44.12** |
-
-Prices are estimates from the prepared purchase requests and may change before the orders are approved.
+The purchase requests will be sent to the instructor for approval before ordering. Prices are estimates before tax and shipping.
 
 ## Testing and Verification
 
@@ -196,9 +161,12 @@ Any changes needed after testing will be updated in the schematic and BOM.
 
 ## Project Information
 
-**Project:** Fill-A-Bot  
-**Course:** EGR304 – Fall 2026  
-**Subsystem:** Pump Control  
+**Project:** Fill-A-Bot
+
+**Course:** EGR304 - Fall 2026
+
+**Subsystem:** Pump Control
+
 **Student:** Clay Belsher
 
 The component list was exported from my KiCad schematic and updated to include the parts needed for the pump assembly.
