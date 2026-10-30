@@ -152,9 +152,19 @@ The team uses direct pin-to-pin communication rather than I2C or UART.
 
 ## Purchasing Plan
 
-Purchase requests have been prepared using the EGR304 purchasing template.
+The parts that aren't available in the lab are included in two purchase requests.
 
-The hardware order is divided between two vendors.
+**DigiKey:** Motor drivers, fuses, fuse holders, power connector, pump connector, and ribbon cable components.
+
+**Amazon:** Gikfun EK1912 R385 12V pump kit, including the power adapter and tubing.
+
+| Vendor | Estimated Cost |
+|---|---:|
+| DigiKey | $34.68 |
+| Amazon | $18.98 |
+| **Total** | **$53.66** |
+
+The purchase requests will be sent to the instructor for approval before ordering.
 
 ### DigiKey
 
