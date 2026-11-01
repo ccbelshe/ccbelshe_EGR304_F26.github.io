@@ -15,7 +15,7 @@ The barrel jack supplies power locally. The L7805 provides a 5V supply for the c
 
 ## Individual Block Diagram
 
-![Clay Pump Control Block Diagram](Clays-block-diagram.drawio.png)
+![Fill-A-Bot Pump Control Block Diagram](Clays-block-diagram(1).drawio.png)
 
 [Download the editable diagram and source image ZIP](Clays-block-diagram-source.zip)
 
