@@ -1,91 +1,64 @@
 
 ---
-Pump Control Schematic
 tags:
   - Fill-A-Bot
   - Pump Control
   - EGR304
 ---
 
-# Pump Control Schematic
+# Schematic
 
 ## Overview
 
-My Fill-A-Bot subsystem is responsible for controlling the water pump. It uses a PIC18F57Q43 Curiosity Nano microcontroller to receive commands from the main controller and operate the pump through a DRV8871 H-bridge motor driver.
+My part of the Fill-A-Bot project focuses on controlling the water pump. The circuit uses a PIC18F57Q43 Curiosity Nano to receive commands from the main controller and a DRV8871 H-bridge to control the pump motor.
 
-The design supports forward, reverse, and stop commands. The H-bridge replaces the original single-MOSFET motor-control design to meet the bidirectional motor requirement.
+I designed the subsystem around three main requirements: reliable motor control, independent power distribution, and straightforward communication with the other boards. The schematic brings these functions together while keeping the higher-current motor circuit separate from the microcontroller's control signals.
 
-The subsystem includes a dedicated 12V power input, fuse protection, a 5V voltage regulator, an eight-pin ribbon connector, and debugging components.
+## Schematic
 
-## Updated Pump Control Schematic
+![Fill-A-Bot Pump Control Schematic](CB_Pump_Control(1).png)
 
-The updated schematic is displayed below.
+[View Full-Resolution Schematic PDF](CB_Pump_Control.pdf)
 
-![Updated Fill-A-Bot Pump Control Schematic](CB_Pump_Control(1).png)
-
-**[View Full-Resolution Schematic PDF](CB_Pump_Control.pdf)**
-
-**[Download Complete KiCad Project ZIP](CB_Pump_Control.zip)**
+[Download KiCad Project ZIP](CB_Pump_Control.zip)
 
 ## Circuit Design
 
-The schematic is organized into five main functional sections:
-
-1. Power input and protection
-2. Voltage regulation
-3. PIC18F57Q43 microcontroller
-4. DRV8871 H-bridge and pump control
-5. Team communication and debugging
-
 ### Power Input and Protection
 
-The pump-control subsystem uses its own DC barrel jack for power.
+The board has its own DC barrel jack so it can receive power independently of the other subsystems. A 1A slow-blow fuse is included to protect the input against excessive current.
 
-A 1A slow-blow fuse is included for input protection. The selected R385 pump kit uses a nominal 12V supply.
-
-The pump receives power from the motor supply, while the microcontroller and control electronics use the regulated control rail.
+The design uses a nominal 12V supply for the pump motor. This allows the motor to receive power through the H-bridge without drawing its operating current through the microcontroller.
 
 ### Voltage Regulation
 
-An L7805 voltage regulator provides the planned 5V supply for the control electronics.
+I selected the L7805 regulator to provide a 5V rail for the control electronics. The input and output capacitors help maintain stable operation when the supply experiences changes in load.
 
-Input and output capacitors support stable operation.
-
-Regulator heating and the Curiosity Nano external-power configuration must be verified before final hardware testing.
+Since the regulator steps 12V down to 5V, heat dissipation is something I'll need to check during testing. I'll also verify the correct external-power configuration for the Curiosity Nano.
 
 ### Microcontroller
 
-The PIC18F57Q43 Curiosity Nano serves as the subsystem controller.
+The PIC18F57Q43 Curiosity Nano handles the control logic for the subsystem. It reads the incoming digital commands and determines whether the pump should stop, run forward, or run in reverse.
 
-It receives digital commands from the main controller, interprets the requested operating state, and generates the appropriate motor-driver control signals.
-
-The microcontroller also supports local debugging through an LED, pushbutton, and spare GPIO connections.
+Using the PIC for command processing also gives me flexibility to adjust the motor-control behavior in firmware without changing the communication method between boards.
 
 ### Motor Driver
 
-The updated design selects the Texas Instruments DRV8871 integrated H-bridge.
+I selected the DRV8871 H-bridge because the pump-control subsystem needs to support both forward and reverse motor operation. A single MOSFET can switch the motor on and off, but it cannot reverse the motor's polarity on its own.
 
-Unlike the original single-MOSFET circuit, the H-bridge supports applying either polarity across the motor, allowing forward and reverse motor commands.
+The DRV8871 handles the motor current while the PIC provides the logic signals. This keeps the high-current switching separate from the microcontroller's GPIO pins.
 
-The PIC controls the DRV8871 through digital signals.
+The driver uses a 68kΩ current-limit resistor. Based on the DRV8871 current-limit equation:
 
-A 68kΩ current-limit resistor is included in the design.
+I_TRIP = 64 / 68 ≈ 0.94A
 
-Using the DRV8871 current-limit relationship:
-
-I_TRIP = 64 / 68 = 0.94A
-
-The nominal current-trip threshold is approximately 0.94A.
-
-This setting is preliminary until the pump's operating, startup, and stall currents are verified.
-
-The driver also uses supply capacitors to support stable operation.
+This gives a nominal current-trip threshold of approximately 0.94A. I'll confirm that this setting is appropriate once the pump's actual operating and startup currents have been measured.
 
 [DRV8871 Datasheet](https://www.ti.com/lit/ds/symlink/drv8871.pdf)
 
 ## Motor Control Logic
 
-The main controller communicates with the pump-control subsystem using two digital command signals.
+The subsystem receives two digital command signals from the main controller. I chose a simple two-bit command structure because it provides the required operating states without needing a more complicated communication protocol.
 
 | Command | Operation |
 |---|---|
@@ -94,63 +67,32 @@ The main controller communicates with the pump-control subsystem using two digit
 | 10 | Reserved / Stop |
 | 11 | Reverse |
 
-The PIC interprets these commands and generates the corresponding DRV8871 control signals.
-
-The command table represents the intended subsystem behavior, not the DRV8871's direct input truth table.
-
-The pump should remain stopped during startup, invalid commands, and conditions requiring shutdown.
+The PIC interprets these commands and sets the DRV8871 inputs accordingly. These are the subsystem commands, not the driver's direct input truth table.
 
 ## Team Communication
 
-The subsystem connects to the main controller using an eight-pin ribbon connector.
+The board communicates with the main controller through an eight-pin ribbon connector. Following the class interface requirements, the connector reserves five pins for digital signals, two for analog signals, and one for ground.
 
 | Ribbon Pin | Function |
 |---|---|
-| 1–5 | Digital communication |
-| 6–7 | Analog connections |
+| 1–5 | Digital signals |
+| 6–7 | Analog signals |
 | 8 | Shared ground |
 
-The system uses direct pin-to-pin communication rather than UART or I2C.
+Communication is handled through direct pin-to-pin connections rather than UART or I2C. This keeps the interface simple and allows the boards to exchange logic signals without additional communication hardware.
 
-Each board has its own power connection. The ribbon connector carries communication signals and a common ground reference, not shared power.
-
-The final digital signal assignments must remain consistent with the team's interface documentation.
+Each subsystem also has its own power input, so the ribbon connector is used for communication and a common ground reference rather than distributing power between boards.
 
 ## Debugging and Testing
 
-The design includes a debug LED, pushbutton, and spare GPIO connections to support testing.
+I included a debug LED, pushbutton, and spare GPIO connections to make troubleshooting easier as the hardware is assembled.
 
-The following items require verification:
+Once the components arrive, I'll start by checking the power rails and confirming that the PIC responds correctly to the incoming commands. From there, I'll test the H-bridge with the pump and measure its current during normal operation and startup.
 
-- Correct 12V and 5V supply operation
-- Digital communication between the boards
-- Forward, reverse, and stop commands
-- Pump operating and startup current
-- DRV8871 current-limit behavior
-- Regulator and motor-driver temperature
-- Safe motor shutdown
-- Pump reverse-flow behavior
-
-## Design Revisions
-
-The original design used a single MOSFET to control the pump in one direction.
-
-Following design review, the motor-control stage was revised to use a DRV8871 H-bridge.
-
-This change supports the required bidirectional motor operation and provides an integrated motor-driver solution.
-
-The updated component selection and bill of materials include the DRV8871, current-limit resistor, and required supply capacitors.
+I'll also check regulator heating, motor stopping behavior, and whether reversing the motor produces the intended fluid movement. These tests will help determine whether any changes are needed before the final PCB design.
 
 ## Design Files
 
-- [Updated Schematic Image](CB_Pump_Control(1).png)
-- [Full-Resolution Schematic PDF](CB_Pump_Control.pdf)
+- [Schematic Image](CB_Pump_Control(1).png)
+- [Schematic PDF](CB_Pump_Control.pdf)
 - [KiCad Project ZIP](CB_Pump_Control.zip)
-
-The schematic PDF and KiCad ZIP should represent the same revision as the displayed schematic image. The ZIP must be replaced if it still contains the earlier MOSFET-only design.
-
-## Current Verification Status
-
-The DRV8871 H-bridge and R385 pump have been selected for the updated design.
-
-Final hardware verification will confirm motor current, bidirectional operation, supply compatibility, and component footprints before PCB fabrication.
