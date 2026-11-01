@@ -119,6 +119,6 @@ The screenshots below document the earlier 9V spreadsheet calculations. They are
 
 ![Original power budget — source total and heat](CB_Power_Budget_3.png)
 
-[Download the editable Excel power budget](CB_Pump_Power_Budget.xlsx)
+[Download the editable Excel power budget](CB_Pump_Power_Budget_12V.xlsx)
 
 [Download the Excel power budget ZIP](CB_Pump_Power_Budget.zip)
