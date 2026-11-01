@@ -1,56 +1,156 @@
+
 ---
-title: Schematics
+Pump Control Schematic
+tags:
+  - Fill-A-Bot
+  - Pump Control
+  - EGR304
 ---
+
+# Pump Control Schematic
 
 ## Overview
 
-My Fill-A-Bot pump subsystem uses a PIC18F57Q43 Curiosity Nano to control an R385 pump through a MOSFET switching circuit. It receives a two-bit digital command from the main controller through PUMP_CMD0 on RC3 and PUMP_CMD1 on RC2. The board includes a local power input, 5 V regulator, fuse, flyback diode, and debugging components. The current motor circuit supports one-direction operation; forward/reverse control remains a planned revision.
+My Fill-A-Bot subsystem is responsible for controlling the water pump. It uses a PIC18F57Q43 Curiosity Nano microcontroller to receive commands from the main controller and operate the pump through a DRV8871 H-bridge motor driver.
 
-## Schematic
+The design supports forward, reverse, and stop commands. The H-bridge replaces the original single-MOSFET motor-control design to meet the bidirectional motor requirement.
 
-<img src="https://raw.githubusercontent.com/ccbelshe/ccbelshe_EGR304_F26.github.io/main/docs/04-Schematic/CB_Pump_Control.png" alt="Pump schematic" class="skip-glightbox" style="width:100%;">
+The subsystem includes a dedicated 12V power input, fuse protection, a 5V voltage regulator, an eight-pin ribbon connector, and debugging components.
 
-## Downloads
+## Updated Pump Control Schematic
 
-- [Schematic PDF](CB_Pump_Control.pdf)
-- [Complete KiCad project ZIP](CB_Pump_Control.zip)
+The updated schematic is displayed below.
 
-## Circuit Operation
+![Updated Fill-A-Bot Pump Control Schematic](CB_Pump_Control(1).png)
 
-### Power Supply
+**[View Full-Resolution Schematic PDF](CB_Pump_Control.pdf)**
 
-Power enters through barrel jack J1 and fuse F1. U1 is the L7805 regulator that provides the planned 5 V supply for the controller. C1 and C2 help keep the regulator input and output stable. C4 provides additional decoupling near the controller.
+**[Download Complete KiCad Project ZIP](CB_Pump_Control.zip)**
 
-My current schematic uses a 12 V input. I still need to resolve that choice with the course requirement for a 9 V adapter.
+## Circuit Design
 
-### Command Inputs
+The schematic is organized into five main functional sections:
 
-The main board sends commands to my pump board using two digital signals. Each signal can be HIGH or LOW, giving four possible combinations. The finalized pump command is read as C1 C0: 00 = Stop, 01 = Run, 10 = Stop, and 11 = Stop. C1 enters through J3 pin 1 at RC3, and C0 enters through J3 pin 2 at RC2. The pump runs only while the command is 01.
+1. Power input and protection
+2. Voltage regulation
+3. PIC18F57Q43 microcontroller
+4. DRV8871 H-bridge and pump control
+5. Team communication and debugging
 
-| Signal | Connector | PIC port |
-|---|---|---|
-| PUMP_CMD0 | J3 pin 1 | RC3 |
-| PUMP_CMD1 | J3 pin 2 | RC2 |
-| Shared ground | J3 pin 8 | GND |
+### Power Input and Protection
 
-RC2 and RC3 will be set as digital inputs in firmware. The UART text on the PIC symbol lists another function those pins can perform. 
+The pump-control subsystem uses its own DC barrel jack for power.
 
-The ribbon uses pins 1–5 for digital I/O, pins 6–7 for analog, and pin 8 for ground. Each board has its own power connection.
+A 1A slow-blow fuse is included for input protection. The selected R385 pump kit uses a nominal 12V supply.
 
-### Pump Control
+The pump receives power from the motor supply, while the microcontroller and control electronics use the regulated control rail.
 
-The PIC controls Q1 through its RA2 output, jumper JP1, and resistor R1. Q1 acts as a switch in the pump's return path to ground. This lets the PIC control the pump without carrying the motor current through a GPIO pin.
+### Voltage Regulation
 
-R1 limits current into the MOSFET gate during switching. R2 pulls the gate toward ground when it is not driven, helping keep Q1 off. D1 gives the motor current a path when Q1 switches off. The pump connects at J2.
+An L7805 voltage regulator provides the planned 5V supply for the control electronics.
 
-Opening JP1 disconnects the PIC from the gate-drive path so that connection can be isolated during testing.
+Input and output capacitors support stable operation.
 
-### Testing and Spare Connections
+Regulator heating and the Curiosity Nano external-power configuration must be verified before final hardware testing.
 
-D2 is a debug LED with current-limiting resistor R3. SW1 provides a local button input, with R4 pulling the input high and C3 providing filtering. I still need to define the LED and button functions in the program.
+### Microcontroller
 
-J4 brings out spare GPIO pins, 5 V, and ground for local testing or expansion.
+The PIC18F57Q43 Curiosity Nano serves as the subsystem controller.
 
-## Changes Still Needed
+It receives digital commands from the main controller, interprets the requested operating state, and generates the appropriate motor-driver control signals.
 
-The current MOSFET circuit controls the pump in one direction. I still need to revise the driver for forward and reverse operation and check whether the selected pump can move water in reverse. The supply voltage and command meanings also need to be finalized.
+The microcontroller also supports local debugging through an LED, pushbutton, and spare GPIO connections.
+
+### Motor Driver
+
+The updated design selects the Texas Instruments DRV8871 integrated H-bridge.
+
+Unlike the original single-MOSFET circuit, the H-bridge supports applying either polarity across the motor, allowing forward and reverse motor commands.
+
+The PIC controls the DRV8871 through digital signals.
+
+A 68kΩ current-limit resistor is included in the design.
+
+Using the DRV8871 current-limit relationship:
+
+I_TRIP = 64 / 68 = 0.94A
+
+The nominal current-trip threshold is approximately 0.94A.
+
+This setting is preliminary until the pump's operating, startup, and stall currents are verified.
+
+The driver also uses supply capacitors to support stable operation.
+
+[DRV8871 Datasheet](https://www.ti.com/lit/ds/symlink/drv8871.pdf)
+
+## Motor Control Logic
+
+The main controller communicates with the pump-control subsystem using two digital command signals.
+
+| Command | Operation |
+|---|---|
+| 00 | Stop |
+| 01 | Forward |
+| 10 | Reserved / Stop |
+| 11 | Reverse |
+
+The PIC interprets these commands and generates the corresponding DRV8871 control signals.
+
+The command table represents the intended subsystem behavior, not the DRV8871's direct input truth table.
+
+The pump should remain stopped during startup, invalid commands, and conditions requiring shutdown.
+
+## Team Communication
+
+The subsystem connects to the main controller using an eight-pin ribbon connector.
+
+| Ribbon Pin | Function |
+|---|---|
+| 1–5 | Digital communication |
+| 6–7 | Analog connections |
+| 8 | Shared ground |
+
+The system uses direct pin-to-pin communication rather than UART or I2C.
+
+Each board has its own power connection. The ribbon connector carries communication signals and a common ground reference, not shared power.
+
+The final digital signal assignments must remain consistent with the team's interface documentation.
+
+## Debugging and Testing
+
+The design includes a debug LED, pushbutton, and spare GPIO connections to support testing.
+
+The following items require verification:
+
+- Correct 12V and 5V supply operation
+- Digital communication between the boards
+- Forward, reverse, and stop commands
+- Pump operating and startup current
+- DRV8871 current-limit behavior
+- Regulator and motor-driver temperature
+- Safe motor shutdown
+- Pump reverse-flow behavior
+
+## Design Revisions
+
+The original design used a single MOSFET to control the pump in one direction.
+
+Following design review, the motor-control stage was revised to use a DRV8871 H-bridge.
+
+This change supports the required bidirectional motor operation and provides an integrated motor-driver solution.
+
+The updated component selection and bill of materials include the DRV8871, current-limit resistor, and required supply capacitors.
+
+## Design Files
+
+- [Updated Schematic Image](CB_Pump_Control(1).png)
+- [Full-Resolution Schematic PDF](CB_Pump_Control.pdf)
+- [KiCad Project ZIP](CB_Pump_Control.zip)
+
+The schematic PDF and KiCad ZIP should represent the same revision as the displayed schematic image. The ZIP must be replaced if it still contains the earlier MOSFET-only design.
+
+## Current Verification Status
+
+The DRV8871 H-bridge and R385 pump have been selected for the updated design.
+
+Final hardware verification will confirm motor current, bidirectional operation, supply compatibility, and component footprints before PCB fabrication.
