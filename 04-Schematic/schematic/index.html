@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pump-control-schematic" class="md-skip">
+        <a href="#schematic" class="md-skip">
           Skip to content
         </a>
       
@@ -646,9 +646,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#updated-pump-control-schematic" class="md-nav__link">
+  <a href="#schematic_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Updated Pump Control Schematic
+      Schematic
     </span>
   </a>
   
@@ -733,27 +733,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-revisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design Revisions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#design-files" class="md-nav__link">
     <span class="md-ellipsis">
       Design Files
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#current-verification-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Current Verification Status
     </span>
   </a>
   
@@ -913,9 +895,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#updated-pump-control-schematic" class="md-nav__link">
+  <a href="#schematic_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Updated Pump Control Schematic
+      Schematic
     </span>
   </a>
   
@@ -1000,27 +982,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-revisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design Revisions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#design-files" class="md-nav__link">
     <span class="md-ellipsis">
       Design Files
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#current-verification-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Current Verification Status
     </span>
   </a>
   
@@ -1050,56 +1014,38 @@
 
 
 <hr />
-<p>Pump Control Schematic
-tags:
+<p>tags:
   - Fill-A-Bot
   - Pump Control
   - EGR304</p>
 <hr />
-<h1 id="pump-control-schematic">Pump Control Schematic</h1>
+<h1 id="schematic">Schematic</h1>
 <h2 id="overview">Overview</h2>
-<p>My Fill-A-Bot subsystem is responsible for controlling the water pump. It uses a PIC18F57Q43 Curiosity Nano microcontroller to receive commands from the main controller and operate the pump through a DRV8871 H-bridge motor driver.</p>
-<p>The design supports forward, reverse, and stop commands. The H-bridge replaces the original single-MOSFET motor-control design to meet the bidirectional motor requirement.</p>
-<p>The subsystem includes a dedicated 12V power input, fuse protection, a 5V voltage regulator, an eight-pin ribbon connector, and debugging components.</p>
-<h2 id="updated-pump-control-schematic">Updated Pump Control Schematic</h2>
-<p>The updated schematic is displayed below.</p>
-<p><img alt="Updated Fill-A-Bot Pump Control Schematic" src="../CB_Pump_Control%281%29.png" /></p>
-<p><strong><a href="../CB_Pump_Control.pdf">View Full-Resolution Schematic PDF</a></strong></p>
-<p><strong><a href="../CB_Pump_Control.zip">Download Complete KiCad Project ZIP</a></strong></p>
+<p>My part of the Fill-A-Bot project focuses on controlling the water pump. The circuit uses a PIC18F57Q43 Curiosity Nano to receive commands from the main controller and a DRV8871 H-bridge to control the pump motor.</p>
+<p>I designed the subsystem around three main requirements: reliable motor control, independent power distribution, and straightforward communication with the other boards. The schematic brings these functions together while keeping the higher-current motor circuit separate from the microcontroller's control signals.</p>
+<h2 id="schematic_1">Schematic</h2>
+<p><img alt="Fill-A-Bot Pump Control Schematic" src="../CB_Pump_Control%281%29.png" /></p>
+<p><a href="../CB_Pump_Control.pdf">View Full-Resolution Schematic PDF</a></p>
+<p><a href="../CB_Pump_Control.zip">Download KiCad Project ZIP</a></p>
 <h2 id="circuit-design">Circuit Design</h2>
-<p>The schematic is organized into five main functional sections:</p>
-<ol>
-<li>Power input and protection</li>
-<li>Voltage regulation</li>
-<li>PIC18F57Q43 microcontroller</li>
-<li>DRV8871 H-bridge and pump control</li>
-<li>Team communication and debugging</li>
-</ol>
 <h3 id="power-input-and-protection">Power Input and Protection</h3>
-<p>The pump-control subsystem uses its own DC barrel jack for power.</p>
-<p>A 1A slow-blow fuse is included for input protection. The selected R385 pump kit uses a nominal 12V supply.</p>
-<p>The pump receives power from the motor supply, while the microcontroller and control electronics use the regulated control rail.</p>
+<p>The board has its own DC barrel jack so it can receive power independently of the other subsystems. A 1A slow-blow fuse is included to protect the input against excessive current.</p>
+<p>The design uses a nominal 12V supply for the pump motor. This allows the motor to receive power through the H-bridge without drawing its operating current through the microcontroller.</p>
 <h3 id="voltage-regulation">Voltage Regulation</h3>
-<p>An L7805 voltage regulator provides the planned 5V supply for the control electronics.</p>
-<p>Input and output capacitors support stable operation.</p>
-<p>Regulator heating and the Curiosity Nano external-power configuration must be verified before final hardware testing.</p>
+<p>I selected the L7805 regulator to provide a 5V rail for the control electronics. The input and output capacitors help maintain stable operation when the supply experiences changes in load.</p>
+<p>Since the regulator steps 12V down to 5V, heat dissipation is something I'll need to check during testing. I'll also verify the correct external-power configuration for the Curiosity Nano.</p>
 <h3 id="microcontroller">Microcontroller</h3>
-<p>The PIC18F57Q43 Curiosity Nano serves as the subsystem controller.</p>
-<p>It receives digital commands from the main controller, interprets the requested operating state, and generates the appropriate motor-driver control signals.</p>
-<p>The microcontroller also supports local debugging through an LED, pushbutton, and spare GPIO connections.</p>
+<p>The PIC18F57Q43 Curiosity Nano handles the control logic for the subsystem. It reads the incoming digital commands and determines whether the pump should stop, run forward, or run in reverse.</p>
+<p>Using the PIC for command processing also gives me flexibility to adjust the motor-control behavior in firmware without changing the communication method between boards.</p>
 <h3 id="motor-driver">Motor Driver</h3>
-<p>The updated design selects the Texas Instruments DRV8871 integrated H-bridge.</p>
-<p>Unlike the original single-MOSFET circuit, the H-bridge supports applying either polarity across the motor, allowing forward and reverse motor commands.</p>
-<p>The PIC controls the DRV8871 through digital signals.</p>
-<p>A 68kΩ current-limit resistor is included in the design.</p>
-<p>Using the DRV8871 current-limit relationship:</p>
-<p>I_TRIP = 64 / 68 = 0.94A</p>
-<p>The nominal current-trip threshold is approximately 0.94A.</p>
-<p>This setting is preliminary until the pump's operating, startup, and stall currents are verified.</p>
-<p>The driver also uses supply capacitors to support stable operation.</p>
+<p>I selected the DRV8871 H-bridge because the pump-control subsystem needs to support both forward and reverse motor operation. A single MOSFET can switch the motor on and off, but it cannot reverse the motor's polarity on its own.</p>
+<p>The DRV8871 handles the motor current while the PIC provides the logic signals. This keeps the high-current switching separate from the microcontroller's GPIO pins.</p>
+<p>The driver uses a 68kΩ current-limit resistor. Based on the DRV8871 current-limit equation:</p>
+<p>I_TRIP = 64 / 68 ≈ 0.94A</p>
+<p>This gives a nominal current-trip threshold of approximately 0.94A. I'll confirm that this setting is appropriate once the pump's actual operating and startup currents have been measured.</p>
 <p><a href="https://www.ti.com/lit/ds/symlink/drv8871.pdf">DRV8871 Datasheet</a></p>
 <h2 id="motor-control-logic">Motor Control Logic</h2>
-<p>The main controller communicates with the pump-control subsystem using two digital command signals.</p>
+<p>The subsystem receives two digital command signals from the main controller. I chose a simple two-bit command structure because it provides the required operating states without needing a more complicated communication protocol.</p>
 <table>
 <thead>
 <tr>
@@ -1126,11 +1072,9 @@ tags:
 </tr>
 </tbody>
 </table>
-<p>The PIC interprets these commands and generates the corresponding DRV8871 control signals.</p>
-<p>The command table represents the intended subsystem behavior, not the DRV8871's direct input truth table.</p>
-<p>The pump should remain stopped during startup, invalid commands, and conditions requiring shutdown.</p>
+<p>The PIC interprets these commands and sets the DRV8871 inputs accordingly. These are the subsystem commands, not the driver's direct input truth table.</p>
 <h2 id="team-communication">Team Communication</h2>
-<p>The subsystem connects to the main controller using an eight-pin ribbon connector.</p>
+<p>The board communicates with the main controller through an eight-pin ribbon connector. Following the class interface requirements, the connector reserves five pins for digital signals, two for analog signals, and one for ground.</p>
 <table>
 <thead>
 <tr>
@@ -1141,11 +1085,11 @@ tags:
 <tbody>
 <tr>
 <td>1–5</td>
-<td>Digital communication</td>
+<td>Digital signals</td>
 </tr>
 <tr>
 <td>6–7</td>
-<td>Analog connections</td>
+<td>Analog signals</td>
 </tr>
 <tr>
 <td>8</td>
@@ -1153,37 +1097,18 @@ tags:
 </tr>
 </tbody>
 </table>
-<p>The system uses direct pin-to-pin communication rather than UART or I2C.</p>
-<p>Each board has its own power connection. The ribbon connector carries communication signals and a common ground reference, not shared power.</p>
-<p>The final digital signal assignments must remain consistent with the team's interface documentation.</p>
+<p>Communication is handled through direct pin-to-pin connections rather than UART or I2C. This keeps the interface simple and allows the boards to exchange logic signals without additional communication hardware.</p>
+<p>Each subsystem also has its own power input, so the ribbon connector is used for communication and a common ground reference rather than distributing power between boards.</p>
 <h2 id="debugging-and-testing">Debugging and Testing</h2>
-<p>The design includes a debug LED, pushbutton, and spare GPIO connections to support testing.</p>
-<p>The following items require verification:</p>
-<ul>
-<li>Correct 12V and 5V supply operation</li>
-<li>Digital communication between the boards</li>
-<li>Forward, reverse, and stop commands</li>
-<li>Pump operating and startup current</li>
-<li>DRV8871 current-limit behavior</li>
-<li>Regulator and motor-driver temperature</li>
-<li>Safe motor shutdown</li>
-<li>Pump reverse-flow behavior</li>
-</ul>
-<h2 id="design-revisions">Design Revisions</h2>
-<p>The original design used a single MOSFET to control the pump in one direction.</p>
-<p>Following design review, the motor-control stage was revised to use a DRV8871 H-bridge.</p>
-<p>This change supports the required bidirectional motor operation and provides an integrated motor-driver solution.</p>
-<p>The updated component selection and bill of materials include the DRV8871, current-limit resistor, and required supply capacitors.</p>
+<p>I included a debug LED, pushbutton, and spare GPIO connections to make troubleshooting easier as the hardware is assembled.</p>
+<p>Once the components arrive, I'll start by checking the power rails and confirming that the PIC responds correctly to the incoming commands. From there, I'll test the H-bridge with the pump and measure its current during normal operation and startup.</p>
+<p>I'll also check regulator heating, motor stopping behavior, and whether reversing the motor produces the intended fluid movement. These tests will help determine whether any changes are needed before the final PCB design.</p>
 <h2 id="design-files">Design Files</h2>
 <ul>
-<li><a href="../CB_Pump_Control%281%29.png">Updated Schematic Image</a></li>
-<li><a href="../CB_Pump_Control.pdf">Full-Resolution Schematic PDF</a></li>
+<li><a href="../CB_Pump_Control%281%29.png">Schematic Image</a></li>
+<li><a href="../CB_Pump_Control.pdf">Schematic PDF</a></li>
 <li><a href="../CB_Pump_Control.zip">KiCad Project ZIP</a></li>
 </ul>
-<p>The schematic PDF and KiCad ZIP should represent the same revision as the displayed schematic image. The ZIP must be replaced if it still contains the earlier MOSFET-only design.</p>
-<h2 id="current-verification-status">Current Verification Status</h2>
-<p>The DRV8871 H-bridge and R385 pump have been selected for the updated design.</p>
-<p>Final hardware verification will confirm motor current, bidirectional operation, supply compatibility, and component footprints before PCB fabrication.</p>
 
 
 
