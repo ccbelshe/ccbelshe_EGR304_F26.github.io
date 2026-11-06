@@ -27,7 +27,7 @@
 
     
       
-        <title>Fill-A-Bot Pump Control - EGR 304 Clay Data Sheet</title>
+        <title>EGR 304 Clay Data Sheet</title>
       
     
     
@@ -446,9 +446,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#current-design-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Design Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#design-documentation" class="md-nav__link">
     <span class="md-ellipsis">
       Design Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#team-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Team Project
     </span>
   </a>
   
@@ -793,9 +811,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#current-design-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Design Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#design-documentation" class="md-nav__link">
     <span class="md-ellipsis">
       Design Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#team-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Team Project
     </span>
   </a>
   
@@ -827,10 +863,43 @@
 <h1 id="fill-a-bot-pump-control">Fill-A-Bot Pump Control</h1>
 <p><strong>Clay Belsher | EGR 304</strong></p>
 <h2 id="project-summary">Project Summary</h2>
-<p>Fill-A-Bot is an automated water-dispensing system that fills a container to a selected amount. The main controller coordinates the user controls, measurement subsystems, and pump board to start dispensing and stop at the target. My responsibility is the pump-control subsystem, including its local power circuit, motor driver, and digital command connections.</p>
+<p>Fill-A-Bot is an automated water-dispensing system designed to fill a container to a selected amount. The main controller coordinates the user controls, measurement subsystems, and pump board to start dispensing and stop at the target.</p>
+<p>My responsibility is the pump-control subsystem. My board receives commands from the main controller and controls the pump motor used to move water from the reservoir.</p>
 <h2 id="my-contribution">My Contribution</h2>
-<p>My board uses a PIC18F57Q43 Curiosity Nano to receive two digital command signals from the main controller. CMD0 connects to RC3, CMD1 connects to RC2, and ribbon pin 8 provides a common ground. RA2 controls the motor-switching circuit.</p>
-<p>The board includes a barrel-jack power input, fuse, 5V linear regulator, motor flyback protection, and a debug LED and button. The current single-MOSFET driver requires an H-bridge revision for forward-and-reverse operation. The linked design pages explain the component choices, configuration, calculations, and remaining decisions.</p>
+<p>My pump-control board uses a <strong>PIC18F57Q43 Curiosity Nano</strong> to receive and interpret two digital command signals from the main controller. The PIC then sends control signals to a <strong>DRV8871 H-bridge motor driver</strong>, which controls the direction of the pump motor.</p>
+<p>The subsystem uses the following two-bit commands:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Command</th>
+<th>Pump Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">00</td>
+<td>Stop</td>
+</tr>
+<tr>
+<td style="text-align: center;">01</td>
+<td>Forward</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td>Reserved / Stop</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td>Reverse</td>
+</tr>
+</tbody>
+</table>
+<p>These are the commands sent to the PIC, not the direct input states of the DRV8871.</p>
+<p>My board also includes its own barrel-jack power input, a fuse, a voltage regulator, a ribbon connector for communication, and a debug LED and button. The boards communicate using direct pin-to-pin signals and a shared ground.</p>
+<h2 id="current-design-status">Current Design Status</h2>
+<p>The schematic includes the DRV8871 H-bridge in place of the original single-MOSFET motor driver. The H-bridge was selected because the design needs to control the motor in both forward and reverse directions.</p>
+<p>The current schematic and written power budget use a nominal <strong>12 V</strong> supply. The final supply voltage still needs to be confirmed against the project requirements. The pump's operating and startup current, the driver current-limit setting, and the pump's behavior in reverse also need to be verified through testing.</p>
+<p>The next step is to complete and verify the PCB layout for manufacturing.</p>
 <h2 id="design-documentation">Design Documentation</h2>
 <table>
 <thead>
@@ -842,35 +911,34 @@
 <tbody>
 <tr>
 <td><a href="01-Block-Diagram/Block-Diagram/">Block Diagram</a></td>
-<td>Power and signal connections, design decisions, and editable diagram files.</td>
+<td>Subsystem connections, signals, and design decisions</td>
 </tr>
 <tr>
 <td><a href="02-Component-Selection/Component-Selection/">Component Selection</a></td>
-<td>Component comparisons, selection reasons, pin assignments, and MCC configuration.</td>
+<td>Component choices, comparisons, and PIC configuration</td>
 </tr>
 <tr>
 <td><a href="03-BOM/BOM/">Bill of Materials</a></td>
-<td>Component-list page.</td>
+<td>Parts used in the pump-control subsystem</td>
 </tr>
 <tr>
 <td><a href="04-Schematic/schematic/">Schematic</a></td>
-<td>Circuit operation, schematic image, high-resolution PDF, and KiCad files.</td>
+<td>Circuit operation, schematic image, PDF, and design files</td>
 </tr>
 <tr>
 <td><a href="05-Power-Budget/Power-Budget/">Power Budget</a></td>
-<td>Preliminary current and heat calculations, assumptions, and the editable spreadsheet.</td>
+<td>Preliminary current and power calculations</td>
 </tr>
 </tbody>
 </table>
+<h2 id="team-project">Team Project</h2>
+<p>Visit the <a href="https://egr304-2026-f-201.github.io/">Fill-A-Bot team website</a> for the overall project design and links to my teammates' individual datasheets.</p>
 
 
 
 
 
 
-
-  
-  
 
 
 
